@@ -1,0 +1,156 @@
+---
+interface Trait {
+  label: string;
+  sideA: string;
+  sideB: string;
+}
+interface Props {
+  labelA: string;
+  labelB: string;
+  traits: Trait[];
+  heading?: string;
+}
+const { labelA, labelB, traits, heading } = Astro.props;
+---
+
+<div class="versus-cards">
+  {heading && <h3 class="vs-heading">{heading}</h3>}
+  <div class="vs-header">
+    <span class="vs-label vs-label-a">{labelA}</span>
+    <span class="vs-badge">VS</span>
+    <span class="vs-label vs-label-b">{labelB}</span>
+  </div>
+  <div class="vs-grid">
+    {traits.map((t) => (
+      <div class="vs-row">
+        <div class="vs-cell vs-cell-a">{t.sideA}</div>
+        <div class="vs-cell-label">{t.label}</div>
+        <div class="vs-cell vs-cell-b">{t.sideB}</div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+.versus-cards {
+  margin: 48px 0;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--gray-100);
+  background: var(--white);
+}
+.vs-heading {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--gray-800);
+  text-align: center;
+  padding: 28px 24px 0;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.vs-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px;
+}
+.vs-label {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 6px 20px;
+  border-radius: 100px;
+}
+.vs-label-a {
+  background: rgba(206,20,131,0.12);
+  color: var(--magenta);
+}
+.vs-label-b {
+  background: rgba(255,151,26,0.12);
+  color: var(--orange);
+}
+.vs-badge {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--gray-400);
+}
+.vs-grid {
+  display: flex;
+  flex-direction: column;
+}
+.vs-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0;
+  border-top: 1px solid var(--gray-100);
+  transition: background 0.2s;
+}
+.vs-row:hover {
+  background: var(--gray-50);
+}
+.vs-cell {
+  padding: 18px 24px;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--gray-700);
+}
+.vs-cell-a {
+  text-align: right;
+  border-right: 1px solid var(--gray-100);
+}
+.vs-cell-b {
+  text-align: left;
+  border-left: 1px solid var(--gray-100);
+}
+.vs-cell-label {
+  padding: 18px 20px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 110px;
+  text-align: center;
+}
+@media (max-width: 768px) {
+  .vs-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .vs-cell-label {
+    order: -1;
+    padding: 14px 20px 4px;
+    justify-content: flex-start;
+    min-width: 0;
+  }
+  .vs-cell {
+    padding: 6px 20px 14px;
+    text-align: left;
+  }
+  .vs-cell-a {
+    text-align: left;
+    border-right: none;
+    border-bottom: none;
+    color: var(--magenta);
+  }
+  .vs-cell-b {
+    border-left: none;
+    color: var(--orange);
+    padding-bottom: 18px;
+  }
+  .vs-cell-a::before {
+    content: attr(data-label) ': ';
+  }
+}
+</style>

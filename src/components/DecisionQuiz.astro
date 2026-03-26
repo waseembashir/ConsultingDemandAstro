@@ -1,0 +1,357 @@
+---
+interface Question {
+  question: string;
+  optionA: string;
+  optionB: string;
+}
+interface Props {
+  questions: Question[];
+  resultA: string;
+  resultB: string;
+  labelA?: string;
+  labelB?: string;
+  heading?: string;
+}
+const { questions, resultA, resultB, labelA = 'Strategist', labelB = 'Consultant', heading = 'Which expert do you need?' } = Astro.props;
+const id = `quiz-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div class="decision-quiz" id={id} data-questions={JSON.stringify(questions)} data-result-a={resultA} data-result-b={resultB} data-label-a={labelA} data-label-b={labelB}>
+  <div class="dq-header">
+    <span class="dq-icon" aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+    </span>
+    <h3 class="dq-heading">{heading}</h3>
+  </div>
+
+  <div class="dq-progress-bar">
+    <div class="dq-progress-fill"></div>
+  </div>
+  <p class="dq-step-label">Question <span class="dq-current">1</span> of {questions.length}</p>
+
+  <div class="dq-questions">
+    {questions.map((q, i) => (
+      <div class="dq-question" data-index={i}>
+        <p class="dq-question-text">{q.question}</p>
+        <div class="dq-options">
+          <button class="dq-option" data-value="a">{q.optionA}</button>
+          <button class="dq-option" data-value="b">{q.optionB}</button>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <div class="dq-result" hidden>
+    <div class="dq-result-icon" aria-hidden="true"></div>
+    <p class="dq-result-label"></p>
+    <p class="dq-result-text"></p>
+    <div class="dq-score-bar">
+      <div class="dq-score-fill-a"></div>
+      <div class="dq-score-fill-b"></div>
+    </div>
+    <div class="dq-score-labels">
+      <span class="dq-score-label-a">{labelA}</span>
+      <span class="dq-score-label-b">{labelB}</span>
+    </div>
+    <button class="dq-restart">Take again</button>
+  </div>
+</div>
+
+<style>
+.decision-quiz {
+  background: var(--gray-800);
+  border-radius: 20px;
+  padding: 40px 36px;
+  margin: 48px 0;
+  position: relative;
+  overflow: hidden;
+}
+.decision-quiz::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--orange), var(--magenta));
+}
+.dq-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.dq-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  background: rgba(255,151,26,0.15);
+  color: var(--orange);
+  flex-shrink: 0;
+}
+.dq-heading {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.02em;
+  margin: 0;
+  line-height: 1.2;
+}
+.dq-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+.dq-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--orange), var(--magenta));
+  border-radius: 4px;
+  transition: width 0.4s var(--ease-out);
+}
+.dq-step-label {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 28px;
+}
+.dq-question {
+  display: none;
+}
+.dq-question.active {
+  display: block;
+  animation: dqFadeIn 0.3s ease-out;
+}
+@keyframes dqFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.dq-question-text {
+  font-family: var(--font-body);
+  font-size: 18px;
+  color: var(--white);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+.dq-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dq-option {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  padding: 18px 24px;
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: left;
+  line-height: 1.4;
+}
+.dq-option:hover {
+  background: rgba(255,151,26,0.12);
+  border-color: var(--orange);
+  color: var(--white);
+  transform: translateX(4px);
+}
+.dq-option.selected {
+  background: rgba(255,151,26,0.2);
+  border-color: var(--orange);
+  color: var(--white);
+}
+.dq-result {
+  animation: dqFadeIn 0.4s ease-out;
+}
+.dq-result[hidden] { display: none; }
+.dq-result-icon {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+.dq-result-icon.strategist {
+  background: linear-gradient(135deg, var(--magenta), rgba(206,20,131,0.3));
+}
+.dq-result-icon.consultant {
+  background: linear-gradient(135deg, var(--orange), rgba(255,151,26,0.3));
+}
+.dq-result-label {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--white);
+  text-align: center;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+.dq-result-text {
+  font-family: var(--font-ui);
+  font-size: 16px;
+  color: rgba(255,255,255,0.65);
+  text-align: center;
+  line-height: 1.6;
+  max-width: 440px;
+  margin: 0 auto 28px;
+}
+.dq-score-bar {
+  display: flex;
+  height: 8px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.06);
+  margin-bottom: 8px;
+}
+.dq-score-fill-a {
+  height: 100%;
+  background: var(--magenta);
+  transition: width 0.6s var(--ease-out);
+  border-radius: 8px 0 0 8px;
+}
+.dq-score-fill-b {
+  height: 100%;
+  background: var(--orange);
+  transition: width 0.6s var(--ease-out);
+  border-radius: 0 8px 8px 0;
+}
+.dq-score-labels {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.dq-score-label-a { color: var(--magenta); }
+.dq-score-label-b { color: var(--orange); }
+.dq-restart {
+  display: block;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 100px;
+  padding: 10px 28px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.dq-restart:hover {
+  background: rgba(255,255,255,0.14);
+  color: var(--white);
+}
+@media (max-width: 768px) {
+  .decision-quiz { padding: 28px 20px; }
+  .dq-heading { font-size: 20px; }
+  .dq-result-label { font-size: 24px; }
+}
+</style>
+
+<script>
+document.querySelectorAll('.decision-quiz').forEach(quiz => {
+  const questions = JSON.parse(quiz.dataset.questions || '[]');
+  const resultA = quiz.dataset.resultA || '';
+  const resultB = quiz.dataset.resultB || '';
+  const labelA = quiz.dataset.labelA || 'A';
+  const labelB = quiz.dataset.labelB || 'B';
+  const total = questions.length;
+  let current = 0;
+  let scoreA = 0;
+  let scoreB = 0;
+
+  const questionEls = quiz.querySelectorAll('.dq-question');
+  const progressFill = quiz.querySelector('.dq-progress-fill') as HTMLElement;
+  const currentLabel = quiz.querySelector('.dq-current');
+  const resultEl = quiz.querySelector('.dq-result') as HTMLElement;
+  const questionsContainer = quiz.querySelector('.dq-questions') as HTMLElement;
+  const stepLabel = quiz.querySelector('.dq-step-label') as HTMLElement;
+  const progressBar = quiz.querySelector('.dq-progress-bar') as HTMLElement;
+
+  function showQuestion(index: number) {
+    questionEls.forEach(q => q.classList.remove('active'));
+    if (questionEls[index]) questionEls[index].classList.add('active');
+    if (progressFill) progressFill.style.width = `${((index) / total) * 100}%`;
+    if (currentLabel) currentLabel.textContent = String(index + 1);
+  }
+
+  function showResult() {
+    questionsContainer.style.display = 'none';
+    stepLabel.style.display = 'none';
+    progressBar.style.display = 'none';
+    resultEl.hidden = false;
+
+    const isStrategist = scoreA >= scoreB;
+    const resultIcon = resultEl.querySelector('.dq-result-icon') as HTMLElement;
+    const resultLabel = resultEl.querySelector('.dq-result-label');
+    const resultText = resultEl.querySelector('.dq-result-text');
+    const fillA = resultEl.querySelector('.dq-score-fill-a') as HTMLElement;
+    const fillB = resultEl.querySelector('.dq-score-fill-b') as HTMLElement;
+
+    resultIcon.className = `dq-result-icon ${isStrategist ? 'strategist' : 'consultant'}`;
+    resultIcon.textContent = isStrategist ? '🧭' : '🔧';
+    if (resultLabel) resultLabel.textContent = `You likely need a ${isStrategist ? labelA : labelB}`;
+    if (resultText) resultText.textContent = isStrategist ? resultA : resultB;
+
+    const pctA = Math.round((scoreA / total) * 100);
+    const pctB = 100 - pctA;
+    requestAnimationFrame(() => {
+      fillA.style.width = `${pctA}%`;
+      fillB.style.width = `${pctB}%`;
+    });
+  }
+
+  quiz.querySelectorAll('.dq-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const value = (btn as HTMLElement).dataset.value;
+      if (value === 'a') scoreA++;
+      else scoreB++;
+
+      (btn as HTMLElement).classList.add('selected');
+
+      setTimeout(() => {
+        current++;
+        if (current >= total) {
+          showResult();
+        } else {
+          showQuestion(current);
+        }
+      }, 300);
+    });
+  });
+
+  quiz.querySelector('.dq-restart')?.addEventListener('click', () => {
+    current = 0;
+    scoreA = 0;
+    scoreB = 0;
+    questionsContainer.style.display = '';
+    stepLabel.style.display = '';
+    progressBar.style.display = '';
+    resultEl.hidden = true;
+    quiz.querySelectorAll('.dq-option').forEach(b => b.classList.remove('selected'));
+    showQuestion(0);
+  });
+
+  showQuestion(0);
+});
+</script>
