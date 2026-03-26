@@ -1,0 +1,170 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const specialisms = [
+  { name: 'Strategy Consulting', description: 'Corporate strategy, market entry, growth advisory, M&A due diligence.' },
+  { name: 'Management Consulting', description: 'Organizational design, change management, operational transformation.' },
+  { name: 'Technology Consulting', description: 'Digital transformation, IT strategy, system implementation, data & AI.' },
+  { name: 'Marketing Consulting', description: 'Brand strategy, demand generation, SEO, content, and go-to-market.' },
+  { name: 'Operations Consulting', description: 'Supply chain, process optimization, lean operations, quality management.' },
+  { name: 'Financial Advisory', description: 'CFO advisory, valuation, restructuring, fundraising support.' },
+];
+
+const steps = [
+  { number: '01', title: 'Define Your Brief', description: 'Tell us what you need — the challenge, timeline, budget range, and what good looks like.' },
+  { number: '02', title: 'Get Matched', description: 'We match you with 2-3 pre-vetted consultants based on specialism, sector, and seniority.' },
+  { number: '03', title: 'Meet & Decide', description: 'Review profiles, hold introductory calls, and choose the consultant that fits best.' },
+];
+---
+
+<BaseLayout
+  title="Find a Consultant — ConsultingDemand"
+  description="Get matched with pre-vetted consultants across strategy, technology, operations, marketing, and more. Free for buyers."
+>
+  <section class="page-hero">
+    <div class="hero-shape hero-shape-1" aria-hidden="true"></div>
+    <div class="hero-shape hero-shape-2" aria-hidden="true"></div>
+    <div class="page-hero-inner">
+      <div class="page-eyebrow reveal">Find a Consultant</div>
+      <h1 class="reveal stagger-1">The right consultant<br />for the <em>right brief.</em></h1>
+      <p class="reveal stagger-2">Tell us what you need. We will match you with 2-3 pre-vetted consultants within 48 hours. Free for buyers.</p>
+      <div class="hero-actions reveal stagger-3">
+        <a href="#brief" class="btn-primary">Submit Your Brief</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="steps-section">
+    <div class="steps-inner">
+      <div class="section-eyebrow reveal">How It Works</div>
+      <div class="steps-grid">
+        {steps.map((step, i) => (
+          <div class:list={['step-card', `reveal stagger-${i + 1}`]}>
+            <span class="step-number">{step.number}</span>
+            <h2 class="step-title">{step.title}</h2>
+            <p>{step.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="specialisms-section">
+    <div class="specialisms-inner">
+      <div class="section-eyebrow reveal">Specialisms We Cover</div>
+      <div class="specialisms-grid">
+        {specialisms.map((s, i) => (
+          <div class:list={['specialism-card', `reveal stagger-${Math.min(i + 1, 6)}`]}>
+            <h3>{s.name}</h3>
+            <p>{s.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="brief-section" id="brief">
+    <div class="brief-inner">
+      <div class="brief-header reveal">
+        <h2>Submit Your Brief</h2>
+        <p>Tell us about your project. We will be in touch within one working day.</p>
+      </div>
+      <form class="brief-form reveal stagger-1" onsubmit="return false;" aria-label="Consultant brief form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="brief-name">Name</label>
+            <input type="text" id="brief-name" placeholder="Your name" required />
+          </div>
+          <div class="form-group">
+            <label for="brief-email">Work Email</label>
+            <input type="email" id="brief-email" placeholder="you@company.com" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="brief-company">Company</label>
+            <input type="text" id="brief-company" placeholder="Company name" />
+          </div>
+          <div class="form-group">
+            <label for="brief-specialism">Specialism Needed</label>
+            <select id="brief-specialism">
+              <option value="">Select a specialism</option>
+              {specialisms.map((s) => <option value={s.name}>{s.name}</option>)}
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="brief-description">Describe Your Project</label>
+          <textarea id="brief-description" rows="5" placeholder="What challenge are you trying to solve? What does success look like?" required></textarea>
+        </div>
+        <button type="submit" class="btn-primary">Submit Brief</button>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+.page-hero {
+  background: var(--black); padding: 100px 48px 120px;
+  position: relative; overflow: hidden; text-align: center;
+}
+.hero-shape { position: absolute; pointer-events: none; border-radius: 50%; }
+.hero-shape-1 { top: -10%; right: -5%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(255,151,26,0.08) 0%, transparent 60%); }
+.hero-shape-2 { bottom: -15%; left: -5%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(72,229,194,0.06) 0%, transparent 60%); }
+.page-hero-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+.page-eyebrow, .section-eyebrow { font-family: var(--font-ui); font-size: 12px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange); margin-bottom: 24px; }
+.page-hero h1 { font-family: var(--font-display); font-size: clamp(40px, 6vw, 72px); font-weight: 900; color: var(--white); line-height: 1.05; letter-spacing: -0.04em; margin-bottom: 20px; }
+.page-hero h1 em { font-style: italic; background: linear-gradient(135deg, var(--orange), var(--mint)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.page-hero p { font-family: var(--font-body); font-size: 19px; color: rgba(255,255,255,0.45); line-height: 1.6; max-width: 580px; margin: 0 auto; }
+.hero-actions { margin-top: 32px; }
+.btn-primary {
+  display: inline-flex; align-items: center; justify-content: center; padding: 16px 40px;
+  background: var(--orange); color: var(--black);
+  font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+  border-radius: 100px; text-decoration: none; border: none; cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+}
+.btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); box-shadow: 0 12px 36px rgba(255,151,26,0.2); }
+
+.steps-section { padding: 80px 48px; background: var(--cream); }
+.steps-inner { max-width: 1200px; margin: 0 auto; }
+.steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.step-card { padding: 36px 32px; background: var(--white); border-radius: 20px; border: 1px solid var(--gray-100); }
+.step-number { font-family: var(--font-display); font-size: 40px; font-weight: 900; color: var(--orange); letter-spacing: -0.04em; display: block; margin-bottom: 12px; }
+.step-title { font-family: var(--font-display); font-size: 22px; font-weight: 800; color: var(--gray-800); margin-bottom: 10px; }
+.step-card p { font-family: var(--font-body); font-size: 15px; color: var(--gray-500); line-height: 1.65; }
+
+.specialisms-section { padding: 80px 48px; }
+.specialisms-inner { max-width: 1200px; margin: 0 auto; }
+.specialisms-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.specialism-card { padding: 28px 24px; background: var(--white); border: 1px solid var(--gray-100); border-radius: 16px; transition: all 0.3s var(--ease-out); }
+.specialism-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.06); }
+.specialism-card h3 { font-family: var(--font-ui); font-size: 16px; font-weight: 700; color: var(--gray-800); margin-bottom: 8px; }
+.specialism-card p { font-family: var(--font-body); font-size: 14px; color: var(--gray-500); line-height: 1.6; }
+
+.brief-section { padding: 80px 48px 100px; background: var(--cream); }
+.brief-inner { max-width: 700px; margin: 0 auto; }
+.brief-header { text-align: center; margin-bottom: 40px; }
+.brief-header h2 { font-family: var(--font-display); font-size: 36px; font-weight: 900; color: var(--gray-800); margin-bottom: 12px; }
+.brief-header p { font-family: var(--font-body); font-size: 17px; color: var(--gray-500); }
+.brief-form { display: flex; flex-direction: column; gap: 20px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-group { display: flex; flex-direction: column; gap: 8px; }
+.form-group label { font-family: var(--font-ui); font-size: 13px; font-weight: 700; color: var(--gray-700); }
+.form-group input, .form-group select, .form-group textarea {
+  padding: 14px 18px; border-radius: 12px; border: 1px solid var(--gray-200);
+  font-family: var(--font-ui); font-size: 15px; color: var(--gray-800);
+  background: var(--white); transition: border-color 0.3s, box-shadow 0.3s; outline: none;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  border-color: var(--orange); box-shadow: 0 0 0 4px rgba(255,151,26,0.1);
+}
+.form-group textarea { resize: vertical; min-height: 120px; }
+
+@media (max-width: 768px) {
+  .page-hero { padding: 56px 20px 80px; }
+  .steps-section, .specialisms-section, .brief-section { padding: 48px 20px 64px; }
+  .steps-grid, .specialisms-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+}
+</style>

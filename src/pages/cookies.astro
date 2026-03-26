@@ -1,0 +1,84 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Cookie Policy — ConsultingDemand"
+  description="How ConsultingDemand uses cookies and similar technologies on our website."
+>
+  <section class="legal-hero">
+    <div class="legal-hero-inner">
+      <h1>Cookie Policy</h1>
+      <p class="legal-date">Last updated: March 2026</p>
+    </div>
+  </section>
+
+  <article class="legal-content">
+    <div class="legal-inner">
+      <h2>1. What Are Cookies?</h2>
+      <p>Cookies are small text files placed on your device when you visit a website. They help the site remember your preferences and understand how you interact with the content.</p>
+
+      <h2>2. How We Use Cookies</h2>
+      <p>ConsultingDemand uses cookies for the following purposes:</p>
+
+      <h3>Essential Cookies</h3>
+      <p>These are necessary for the website to function properly. They enable core features such as page navigation and access to secure areas. The website cannot function properly without these cookies.</p>
+
+      <h3>Analytics Cookies</h3>
+      <p>We use analytics cookies to understand how visitors interact with our site — which pages are popular, how long people spend reading, and where traffic comes from. This helps us improve our content and user experience. These cookies collect anonymised data.</p>
+
+      <h3>Preference Cookies</h3>
+      <p>These cookies remember choices you have made (such as category filters or newsletter dismissal) to provide a more personalised experience.</p>
+
+      <h2>3. Third-Party Cookies</h2>
+      <p>Some cookies on our site are set by third-party services we use:</p>
+      <ul>
+        <li><strong>Google Analytics</strong> — to measure site traffic and user behaviour patterns.</li>
+        <li><strong>Newsletter provider</strong> — to track email subscription status and preferences.</li>
+      </ul>
+      <p>We do not allow third-party advertising cookies or tracking pixels on our site.</p>
+
+      <h2>4. Managing Cookies</h2>
+      <p>You can control cookies through your browser settings. Most browsers allow you to:</p>
+      <ul>
+        <li>View what cookies are stored and delete them individually.</li>
+        <li>Block third-party cookies.</li>
+        <li>Block cookies from specific sites.</li>
+        <li>Block all cookies.</li>
+        <li>Delete all cookies when you close your browser.</li>
+      </ul>
+      <p>Please note that blocking cookies may affect the functionality of our site.</p>
+
+      <h2>5. Changes to This Policy</h2>
+      <p>We may update this Cookie Policy from time to time. The date at the top of this page indicates when it was last revised.</p>
+
+      <h2>6. Contact</h2>
+      <p>For questions about our use of cookies, contact us at <a href="mailto:privacy@consultingdemand.com">privacy@consultingdemand.com</a>.</p>
+
+      <p>For more information about how we handle your data, see our <a href="/privacy">Privacy Policy</a>.</p>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+.legal-hero { background: var(--black); padding: 100px 48px 80px; text-align: center; }
+.legal-hero-inner { max-width: 800px; margin: 0 auto; }
+.legal-hero h1 { font-family: var(--font-display); font-size: clamp(36px, 5vw, 56px); font-weight: 900; color: var(--white); letter-spacing: -0.03em; margin-bottom: 12px; }
+.legal-date { font-family: var(--font-ui); font-size: 14px; color: rgba(255,255,255,0.4); }
+
+.legal-content { padding: 64px 48px 100px; }
+.legal-inner { max-width: 720px; margin: 0 auto; }
+.legal-inner h2 { font-family: var(--font-display); font-size: 24px; font-weight: 800; color: var(--gray-800); margin: 40px 0 16px; letter-spacing: -0.02em; }
+.legal-inner h2:first-child { margin-top: 0; }
+.legal-inner h3 { font-family: var(--font-ui); font-size: 16px; font-weight: 700; color: var(--gray-700); margin: 24px 0 10px; }
+.legal-inner p { font-family: var(--font-body); font-size: 16px; color: var(--gray-600); line-height: 1.75; margin-bottom: 16px; }
+.legal-inner ul { margin: 0 0 16px 24px; }
+.legal-inner li { font-family: var(--font-body); font-size: 16px; color: var(--gray-600); line-height: 1.75; margin-bottom: 8px; }
+.legal-inner a { color: var(--orange); text-decoration: underline; text-underline-offset: 3px; transition: color 0.2s; }
+.legal-inner a:hover { color: var(--orange-dark); }
+
+@media (max-width: 768px) {
+  .legal-hero { padding: 56px 20px 48px; }
+  .legal-content { padding: 40px 20px 64px; }
+}
+</style>

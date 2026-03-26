@@ -9,10 +9,25 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "npx playwright test",
+    "test:blog": "npx playwright test tests/blog-qa.spec.ts",
+    "test:a11y": "npx playwright test tests/accessibility.spec.ts",
+    "test:visual": "npx playwright test tests/visual.spec.ts",
+    "test:visual:update": "npx playwright test tests/visual.spec.ts --update-snapshots",
+    "test:qa": "npx playwright test tests/blog-qa.spec.ts tests/accessibility.spec.ts",
+    "lighthouse": "npx lhci autorun"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.2",
-    "astro": "^6.0.8"
+    "@resvg/resvg-js": "^2.6.2",
+    "astro": "^6.0.8",
+    "satori": "^0.26.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
+    "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.58.2",
+    "axe-core": "^4.11.1"
   }
 }

@@ -14,6 +14,7 @@ interface Props {
   readTime: string;
   tags?: string[];
   headings?: { depth: number; slug: string; text: string }[];
+  ogImage?: string;
 }
 
 const {
@@ -29,6 +30,7 @@ const {
   readTime,
   tags = [],
   headings = [],
+  ogImage,
 } = Astro.props;
 
 const formattedDate = publishDate.toLocaleDateString('en-GB', {
@@ -41,7 +43,7 @@ const formattedUpdated = updatedDate?.toLocaleDateString('en-GB', {
 const tocItems = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
-<BaseLayout title={`${title} — ConsultingDemand`} description={description}>
+<BaseLayout title={`${title} — ConsultingDemand`} description={description} ogImage={ogImage} ogType="article">
   <!-- Reading progress bar -->
   <div id="progress-bar" role="progressbar" aria-label="Reading progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
 
@@ -374,7 +376,7 @@ const tocItems = headings.filter((h) => h.depth === 2 || h.depth === 3);
   letter-spacing: -0.01em;
 }
 .prose :global(p) { margin-bottom: 24px; }
-.prose :global(p:first-of-type::first-letter) {
+.prose > :global(p:first-of-type::first-letter) {
   float: left;
   font-family: var(--font-display);
   font-size: 72px;
@@ -382,7 +384,6 @@ const tocItems = headings.filter((h) => h.depth === 2 || h.depth === 3);
   line-height: 0.75;
   color: var(--orange);
   margin: 8px 12px -4px 0;
-
 }
 .prose :global(ul), .prose :global(ol) {
   padding-left: 28px;
@@ -409,7 +410,7 @@ const tocItems = headings.filter((h) => h.depth === 2 || h.depth === 3);
   background: linear-gradient(90deg, transparent, var(--gray-200), transparent);
   margin: 48px 0;
 }
-.prose :global(blockquote) {
+.prose > :global(blockquote) {
   margin: 40px 0;
   padding: 24px 32px;
   background: var(--cream);
@@ -650,7 +651,7 @@ const tocItems = headings.filter((h) => h.depth === 2 || h.depth === 3);
   }
   .article-body { grid-column: 1; }
   .article-cta { padding: 64px 20px; }
-  .prose :global(p:first-of-type::first-letter) {
+  .prose > :global(p:first-of-type::first-letter) {
     font-size: 56px;
     line-height: 0.8;
   }

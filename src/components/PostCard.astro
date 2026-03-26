@@ -10,6 +10,7 @@ interface Props {
   authorInitials: string;
   featured?: boolean;
   size?: 'normal' | 'wide'; // wide = card 7 horizontal style
+  coverImage?: string;
 }
 
 const {
@@ -23,6 +24,7 @@ const {
   authorInitials,
   featured = false,
   size = 'normal',
+  coverImage,
 } = Astro.props;
 
 const formattedDate = publishDate.toLocaleDateString('en-GB', {
@@ -31,29 +33,45 @@ const formattedDate = publishDate.toLocaleDateString('en-GB', {
 });
 ---
 
-<a href={`/blog/${slug}`} class:list={['post-card', { featured, wide: size === 'wide' }]}>
-  <div class="card-image">
-    <div class="card-image-inner" aria-hidden="true"></div>
-    <span class="card-category">{category}</span>
-  </div>
-  <div class="card-body">
-    <div class="card-meta">
-      <span>{formattedDate}</span>
-      <span class="card-meta-dot" aria-hidden="true"></span>
-      <span>{readTime}</span>
+<article class="post-card-wrapper" data-category={category}>
+  <a href={`/blog/${slug}`} class:list={['post-card', { featured, wide: size === 'wide' }]}>
+    <div class="card-image">
+      {coverImage ? (
+        <img
+          src={coverImage}
+          alt=""
+          class="card-image-img"
+          loading="lazy"
+          decoding="async"
+          width="1200"
+          height="630"
+        />
+      ) : (
+        <div class="card-image-inner" aria-hidden="true"></div>
+      )}
+      <span class="card-category">{category}</span>
     </div>
-    <h2 class="card-title">{title}</h2>
-    <p class="card-excerpt">{excerpt}</p>
-  </div>
-  <div class="card-footer">
-    <div class="card-avatar" aria-hidden="true">{authorInitials}</div>
-    <span class="card-author-name">{author}</span>
-  </div>
-</a>
+    <div class="card-body">
+      <div class="card-meta">
+        <time datetime={publishDate.toISOString().slice(0, 10)}>{formattedDate}</time>
+        <span class="card-meta-dot" aria-hidden="true"></span>
+        <span>{readTime}</span>
+      </div>
+      <h2 class="card-title">{title}</h2>
+      <p class="card-excerpt">{excerpt}</p>
+    </div>
+    <div class="card-footer">
+      <div class="card-avatar" aria-hidden="true">{authorInitials}</div>
+      <span class="card-author-name">{author}</span>
+    </div>
+  </a>
+</article>
 
 <style>
+.post-card-wrapper { height: 100%; }
 .post-card {
   display: block;
+  height: 100%;
   background: var(--white);
   border-radius: 20px;
   overflow: hidden;
@@ -86,22 +104,24 @@ const formattedDate = publishDate.toLocaleDateString('en-GB', {
 .post-card.featured {
   display: grid;
   grid-template-columns: 1.3fr 1fr;
+  grid-template-rows: 1fr auto;
   min-height: 480px;
 }
-.post-card.featured .card-image { min-height: 480px; }
+.post-card.featured .card-image { min-height: 480px; grid-row: 1 / -1; }
 .post-card.featured .card-body { padding: 48px 44px; display: flex; flex-direction: column; justify-content: center; }
 .post-card.featured .card-title { font-size: 36px; line-height: 1.15; }
 .post-card.featured .card-excerpt { -webkit-line-clamp: 4; }
-.post-card.featured .card-footer { padding: 0 44px 40px; }
+.post-card.featured .card-footer { padding: 0 44px 40px; grid-column: 2; }
 /* Wide layout */
 .post-card.wide {
   display: grid;
   grid-template-columns: 1fr 1.5fr;
+  grid-template-rows: 1fr auto;
 }
-.post-card.wide .card-image { min-height: 300px; }
+.post-card.wide .card-image { min-height: 300px; grid-row: 1 / -1; }
 .post-card.wide .card-body { padding: 40px; display: flex; flex-direction: column; justify-content: center; }
 .post-card.wide .card-title { font-size: 28px; }
-.post-card.wide .card-footer { padding: 0 40px 32px; }
+.post-card.wide .card-footer { padding: 0 40px 32px; grid-column: 2; }
 
 .card-image {
   width: 100%;
@@ -109,6 +129,14 @@ const formattedDate = publishDate.toLocaleDateString('en-GB', {
   position: relative;
   overflow: hidden;
   background: var(--gray-800);
+}
+.card-image-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  position: absolute;
+  inset: 0;
 }
 .card-image-inner {
   position: absolute;

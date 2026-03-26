@@ -1,0 +1,80 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Terms of Service — ConsultingDemand"
+  description="Terms and conditions governing your use of the ConsultingDemand website."
+>
+  <section class="legal-hero">
+    <div class="legal-hero-inner">
+      <h1>Terms of Service</h1>
+      <p class="legal-date">Last updated: March 2026</p>
+    </div>
+  </section>
+
+  <article class="legal-content">
+    <div class="legal-inner">
+      <h2>1. Acceptance of Terms</h2>
+      <p>By accessing and using consultingdemand.com ("the Site"), you agree to be bound by these Terms of Service. If you do not agree, please do not use the Site.</p>
+
+      <h2>2. About the Site</h2>
+      <p>ConsultingDemand publishes editorial content, research reports, and tools related to the consulting industry. We also offer a consultant matching service for businesses seeking advisory support.</p>
+
+      <h2>3. Editorial Content</h2>
+      <p>All articles, reports, and analysis on the Site are for informational purposes only. They do not constitute professional advice. You should not rely solely on our content when making business decisions — always seek appropriate professional counsel.</p>
+
+      <h2>4. Intellectual Property</h2>
+      <p>All content on the Site, including text, graphics, logos, and data, is the property of ConsultingDemand or its content licensors and is protected by copyright law. You may not reproduce, distribute, or create derivative works without our written permission.</p>
+      <p>Brief quotations with attribution and a link back to the original article are permitted.</p>
+
+      <h2>5. Consultant Matching Service</h2>
+      <p>Our matching service connects businesses with independent consultants. ConsultingDemand is not a party to any agreement between you and a consultant. We do not guarantee the quality, suitability, or outcome of any engagement.</p>
+
+      <h2>6. User Submissions</h2>
+      <p>When you submit information through our forms (contact, newsletter signup, consultant briefs), you agree that:</p>
+      <ul>
+        <li>The information you provide is accurate and current.</li>
+        <li>You will not submit content that is unlawful, harmful, or infringes on the rights of others.</li>
+        <li>We may use the information as described in our <a href="/privacy">Privacy Policy</a>.</li>
+      </ul>
+
+      <h2>7. Limitation of Liability</h2>
+      <p>To the fullest extent permitted by law, ConsultingDemand shall not be liable for any indirect, incidental, or consequential damages arising from your use of the Site or reliance on its content.</p>
+
+      <h2>8. Third-Party Links</h2>
+      <p>The Site may contain links to external websites. We are not responsible for the content, accuracy, or practices of third-party sites.</p>
+
+      <h2>9. Modifications</h2>
+      <p>We reserve the right to modify these Terms at any time. Continued use of the Site after changes constitutes acceptance of the revised Terms.</p>
+
+      <h2>10. Governing Law</h2>
+      <p>These Terms are governed by the laws of England and Wales. Any disputes shall be subject to the exclusive jurisdiction of the courts of England and Wales.</p>
+
+      <h2>11. Contact</h2>
+      <p>For questions about these Terms, contact us at <a href="mailto:legal@consultingdemand.com">legal@consultingdemand.com</a>.</p>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+.legal-hero { background: var(--black); padding: 100px 48px 80px; text-align: center; }
+.legal-hero-inner { max-width: 800px; margin: 0 auto; }
+.legal-hero h1 { font-family: var(--font-display); font-size: clamp(36px, 5vw, 56px); font-weight: 900; color: var(--white); letter-spacing: -0.03em; margin-bottom: 12px; }
+.legal-date { font-family: var(--font-ui); font-size: 14px; color: rgba(255,255,255,0.4); }
+
+.legal-content { padding: 64px 48px 100px; }
+.legal-inner { max-width: 720px; margin: 0 auto; }
+.legal-inner h2 { font-family: var(--font-display); font-size: 24px; font-weight: 800; color: var(--gray-800); margin: 40px 0 16px; letter-spacing: -0.02em; }
+.legal-inner h2:first-child { margin-top: 0; }
+.legal-inner p { font-family: var(--font-body); font-size: 16px; color: var(--gray-600); line-height: 1.75; margin-bottom: 16px; }
+.legal-inner ul { margin: 0 0 16px 24px; }
+.legal-inner li { font-family: var(--font-body); font-size: 16px; color: var(--gray-600); line-height: 1.75; margin-bottom: 8px; }
+.legal-inner a { color: var(--orange); text-decoration: underline; text-underline-offset: 3px; transition: color 0.2s; }
+.legal-inner a:hover { color: var(--orange-dark); }
+
+@media (max-width: 768px) {
+  .legal-hero { padding: 56px 20px 48px; }
+  .legal-content { padding: 40px 20px 64px; }
+}
+</style>

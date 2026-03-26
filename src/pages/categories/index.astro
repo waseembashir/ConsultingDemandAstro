@@ -1,0 +1,188 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const allPosts = await getCollection('posts');
+
+const categoryMap = new Map<string, number>();
+for (const post of allPosts) {
+  const cat = post.data.category;
+  categoryMap.set(cat, (categoryMap.get(cat) || 0) + 1);
+}
+
+const categories = [...categoryMap.entries()]
+  .sort((a, b) => b[1] - a[1])
+  .map(([name, count]) => ({
+    name,
+    count,
+    slug: name.toLowerCase().replace(/ /g, '-'),
+  }));
+---
+
+<BaseLayout
+  title="Categories — ConsultingDemand"
+  description="Browse consulting insights by topic — from strategy and operations to marketing and hiring guides."
+>
+  <section class="page-hero">
+    <div class="hero-shape hero-shape-1" aria-hidden="true"></div>
+    <div class="hero-shape hero-shape-2" aria-hidden="true"></div>
+    <div class="page-hero-inner">
+      <div class="page-eyebrow reveal">Browse by Topic</div>
+      <h1 class="reveal stagger-1">Every consulting<br /><em>specialism covered.</em></h1>
+      <p class="reveal stagger-2">Explore our library across {categories.length} categories and {allPosts.length} articles.</p>
+    </div>
+  </section>
+
+  <section class="categories-grid-section">
+    <div class="categories-grid-inner">
+      {categories.map((cat, i) => (
+        <a href={`/categories/${cat.slug}`} class:list={['category-card', `reveal stagger-${Math.min(i + 1, 6)}`]}>
+          <div class="category-card-top">
+            <span class="category-card-count">{cat.count}</span>
+            <span class="category-card-label">articles</span>
+          </div>
+          <h2 class="category-card-name">{cat.name}</h2>
+          <span class="category-card-arrow" aria-hidden="true">→</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+.page-hero {
+  background: var(--black);
+  padding: 100px 48px 120px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+.hero-shape { position: absolute; pointer-events: none; border-radius: 50%; }
+.hero-shape-1 {
+  top: -10%; right: -5%;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(255,151,26,0.08) 0%, transparent 60%);
+}
+.hero-shape-2 {
+  bottom: -15%; left: -5%;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(72,229,194,0.06) 0%, transparent 60%);
+}
+.page-hero-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.page-eyebrow {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 24px;
+}
+.page-hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  margin-bottom: 20px;
+}
+.page-hero h1 em {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--orange), var(--mint));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.page-hero p {
+  font-family: var(--font-body);
+  font-size: 19px;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.6;
+}
+
+.categories-grid-section {
+  max-width: 1200px;
+  margin: -48px auto 100px;
+  padding: 0 48px;
+  position: relative;
+  z-index: 2;
+}
+.categories-grid-inner {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+.category-card {
+  background: var(--white);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 20px;
+  padding: 36px 32px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.4s var(--ease-out);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.category-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--orange), var(--magenta));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.category-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+  border-color: transparent;
+}
+.category-card:hover::before { opacity: 1; }
+.category-card-top {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.category-card-count {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--orange);
+  letter-spacing: -0.03em;
+}
+.category-card-label {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--gray-400);
+  font-weight: 500;
+}
+.category-card-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gray-800);
+  line-height: 1.25;
+}
+.category-card-arrow {
+  font-family: var(--font-ui);
+  font-size: 20px;
+  color: var(--orange);
+  transition: transform 0.3s;
+}
+.category-card:hover .category-card-arrow { transform: translateX(4px); }
+
+@media (max-width: 768px) {
+  .page-hero { padding: 56px 20px 80px; }
+  .categories-grid-section { padding: 0 20px; margin-top: -32px; }
+  .categories-grid-inner { grid-template-columns: 1fr; }
+}
+</style>

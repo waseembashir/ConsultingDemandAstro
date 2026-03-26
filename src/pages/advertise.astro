@@ -1,0 +1,108 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const offerings = [
+  { title: 'Sponsored Content', description: 'Commission original research or editorial content that reaches our audience of consulting buyers. Clearly labelled, editorially rigorous.' },
+  { title: 'Display Advertising', description: 'Premium placements across our site — blog pages, category hubs, and report downloads. No pop-ups, no autoplay.' },
+  { title: 'Newsletter Sponsorship', description: 'Reach 50,000+ weekly subscribers with a dedicated placement in The Consulting Brief, our Thursday newsletter.' },
+  { title: 'Report Co-Branding', description: 'Co-fund original research and get your brand on the cover. Great for thought leadership and lead generation.' },
+];
+
+const stats = [
+  { value: '50k+', label: 'Monthly readers' },
+  { value: '12k+', label: 'Newsletter subscribers' },
+  { value: '8 min', label: 'Avg. time on page' },
+  { value: '72%', label: 'Director+ audience' },
+];
+---
+
+<BaseLayout
+  title="Advertise — ConsultingDemand"
+  description="Reach 50,000+ business leaders who buy consulting services. Premium advertising and sponsored content opportunities."
+>
+  <section class="page-hero">
+    <div class="hero-shape hero-shape-1" aria-hidden="true"></div>
+    <div class="page-hero-inner">
+      <div class="page-eyebrow reveal">Advertise</div>
+      <h1 class="reveal stagger-1">Reach the people who<br /><em>buy consulting.</em></h1>
+      <p class="reveal stagger-2">Our audience is senior decision-makers actively researching consulting services. No wasted impressions.</p>
+    </div>
+  </section>
+
+  <section class="stats-bar">
+    <div class="stats-bar-inner">
+      {stats.map((s) => (
+        <div class="stat-item">
+          <span class="stat-value">{s.value}</span>
+          <span class="stat-label">{s.label}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="offerings-section">
+    <div class="offerings-inner">
+      <div class="offerings-grid">
+        {offerings.map((o, i) => (
+          <div class:list={['offering-card', `reveal stagger-${i + 1}`]}>
+            <h2>{o.title}</h2>
+            <p>{o.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section reveal">
+    <div class="cta-inner">
+      <h2>Interested?</h2>
+      <p>Drop us a line and we will send over our media kit with rates, audience data, and case studies.</p>
+      <a href="/contact" class="btn-primary">Get in Touch</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+.page-hero { background: var(--black); padding: 100px 48px 120px; position: relative; overflow: hidden; text-align: center; }
+.hero-shape { position: absolute; pointer-events: none; border-radius: 50%; }
+.hero-shape-1 { top: -10%; right: -5%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(255,151,26,0.08) 0%, transparent 60%); }
+.page-hero-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+.page-eyebrow { font-family: var(--font-ui); font-size: 12px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange); margin-bottom: 24px; }
+.page-hero h1 { font-family: var(--font-display); font-size: clamp(40px, 6vw, 72px); font-weight: 900; color: var(--white); line-height: 1.05; letter-spacing: -0.04em; margin-bottom: 20px; }
+.page-hero h1 em { font-style: italic; background: linear-gradient(135deg, var(--orange), var(--mint)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.page-hero p { font-family: var(--font-body); font-size: 19px; color: rgba(255,255,255,0.45); line-height: 1.6; max-width: 560px; margin: 0 auto; }
+
+.stats-bar { background: var(--black); border-top: 1px solid rgba(255,151,26,0.15); padding: 28px 48px; }
+.stats-bar-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+.stat-item { display: flex; flex-direction: column; gap: 4px; text-align: center; }
+.stat-value { font-family: var(--font-display); font-size: 32px; font-weight: 900; color: var(--orange); letter-spacing: -0.04em; }
+.stat-label { font-family: var(--font-ui); font-size: 13px; color: rgba(255,255,255,0.45); font-weight: 500; }
+
+.offerings-section { padding: 80px 48px; }
+.offerings-inner { max-width: 1000px; margin: 0 auto; }
+.offerings-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.offering-card { background: var(--white); border: 1px solid var(--gray-100); border-radius: 20px; padding: 36px 32px; transition: all 0.3s var(--ease-out); }
+.offering-card:hover { transform: translateY(-3px); box-shadow: 0 16px 48px rgba(0,0,0,0.06); }
+.offering-card h2 { font-family: var(--font-display); font-size: 22px; font-weight: 800; color: var(--gray-800); margin-bottom: 12px; }
+.offering-card p { font-family: var(--font-body); font-size: 15px; color: var(--gray-500); line-height: 1.65; }
+
+.cta-section { background: var(--cream); padding: 80px 48px; text-align: center; }
+.cta-inner { max-width: 500px; margin: 0 auto; }
+.cta-inner h2 { font-family: var(--font-display); font-size: 36px; font-weight: 900; color: var(--gray-800); margin-bottom: 16px; }
+.cta-inner p { font-family: var(--font-body); font-size: 17px; color: var(--gray-500); line-height: 1.65; margin-bottom: 28px; }
+.btn-primary {
+  display: inline-flex; align-items: center; padding: 16px 40px;
+  background: var(--orange); color: var(--black);
+  font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+  border-radius: 100px; text-decoration: none; transition: all 0.3s var(--ease-out);
+}
+.btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); box-shadow: 0 12px 36px rgba(255,151,26,0.2); }
+
+@media (max-width: 768px) {
+  .page-hero { padding: 56px 20px 80px; }
+  .stats-bar { padding: 24px 20px; }
+  .stats-bar-inner { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .offerings-section, .cta-section { padding: 48px 20px 64px; }
+  .offerings-grid { grid-template-columns: 1fr; }
+}
+</style>

@@ -1,0 +1,127 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const reports = [
+  { title: 'UK Consulting Market Report 2024', description: 'Day rates, demand trends, and hiring patterns across 12 consulting specialisms. Based on survey data from 340+ consultants and 180+ buyers.', tag: 'Annual Report', coming: false },
+  { title: 'Consultant Day Rate Benchmark', description: 'What are businesses actually paying? Rate ranges by specialism, seniority, region, and engagement type.', tag: 'Benchmark', coming: false },
+  { title: 'Digital Transformation Buying Guide', description: 'A framework for evaluating and hiring technology consultants — from scoping to statement of work.', tag: 'Buying Guide', coming: false },
+  { title: 'Management Consulting Trends 2025', description: 'Where the market is heading: AI-augmented delivery, outcome-based pricing, and the rise of fractional consulting.', tag: 'Coming Soon', coming: true },
+  { title: 'Strategy Consulting ROI Study', description: 'Do strategy engagements actually pay off? We surveyed 120 buyers to find out what drives — and destroys — consulting ROI.', tag: 'Coming Soon', coming: true },
+];
+---
+
+<BaseLayout
+  title="Reports — ConsultingDemand"
+  description="Original research, rate benchmarks, and market intelligence reports on the consulting industry."
+>
+  <section class="page-hero">
+    <div class="hero-shape hero-shape-1" aria-hidden="true"></div>
+    <div class="hero-shape hero-shape-2" aria-hidden="true"></div>
+    <div class="page-hero-inner">
+      <div class="page-eyebrow reveal">Reports & Research</div>
+      <h1 class="reveal stagger-1">Data, not <em>opinions.</em></h1>
+      <p class="reveal stagger-2">Original research, rate benchmarks, and market intelligence for businesses that buy consulting services.</p>
+    </div>
+  </section>
+
+  <section class="reports-section">
+    <div class="reports-inner">
+      {reports.map((report, i) => (
+        <div class:list={['report-card', { 'report-card--coming': report.coming }, `reveal stagger-${Math.min(i + 1, 5)}`]}>
+          <div class="report-card-tag">
+            <span class:list={['tag', { 'tag--coming': report.coming }]}>{report.tag}</span>
+          </div>
+          <div class="report-card-body">
+            <h2>{report.title}</h2>
+            <p>{report.description}</p>
+          </div>
+          <div class="report-card-action">
+            {report.coming ? (
+              <span class="btn-disabled">Coming Soon</span>
+            ) : (
+              <button class="btn-primary" type="button">Download Free</button>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="newsletter-cta">
+    <div class="newsletter-cta-inner reveal">
+      <h2>Get reports straight to your inbox</h2>
+      <p>Subscribe to be notified when new research is published.</p>
+      <form class="nl-form" onsubmit="return false;" aria-label="Report notification signup">
+        <label for="report-email" class="sr-only">Email address</label>
+        <input type="email" id="report-email" class="nl-input" placeholder="you@company.com" />
+        <button class="nl-btn" type="submit">Notify Me</button>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+.page-hero {
+  background: var(--black); padding: 100px 48px 120px;
+  position: relative; overflow: hidden; text-align: center;
+}
+.hero-shape { position: absolute; pointer-events: none; border-radius: 50%; }
+.hero-shape-1 { top: -10%; right: -5%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(255,151,26,0.08) 0%, transparent 60%); }
+.hero-shape-2 { bottom: -15%; left: -5%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(72,229,194,0.06) 0%, transparent 60%); }
+.page-hero-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+.page-eyebrow { font-family: var(--font-ui); font-size: 12px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange); margin-bottom: 24px; }
+.page-hero h1 { font-family: var(--font-display); font-size: clamp(40px, 6vw, 72px); font-weight: 900; color: var(--white); line-height: 1.05; letter-spacing: -0.04em; margin-bottom: 20px; }
+.page-hero h1 em { font-style: italic; background: linear-gradient(135deg, var(--orange), var(--mint)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.page-hero p { font-family: var(--font-body); font-size: 19px; color: rgba(255,255,255,0.45); line-height: 1.6; max-width: 560px; margin: 0 auto; }
+
+.reports-section { max-width: 900px; margin: -48px auto 80px; padding: 0 48px; position: relative; z-index: 2; }
+.report-card {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 32px; align-items: center;
+  background: var(--white); border: 1px solid rgba(0,0,0,0.06); border-radius: 20px;
+  padding: 36px 40px; margin-bottom: 20px;
+  transition: all 0.3s var(--ease-out);
+}
+.report-card:hover { transform: translateY(-2px); box-shadow: 0 16px 48px rgba(0,0,0,0.06); }
+.report-card--coming { opacity: 0.7; }
+.tag {
+  font-family: var(--font-ui); font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 8px 16px; border-radius: 100px;
+  background: var(--orange-light); color: var(--orange-dark);
+}
+.tag--coming { background: var(--gray-100); color: var(--gray-400); }
+.report-card-body h2 { font-family: var(--font-display); font-size: 22px; font-weight: 800; color: var(--gray-800); margin-bottom: 8px; letter-spacing: -0.02em; }
+.report-card-body p { font-family: var(--font-body); font-size: 15px; color: var(--gray-500); line-height: 1.6; }
+.btn-primary {
+  display: inline-flex; align-items: center; padding: 14px 32px;
+  background: var(--orange); color: var(--black);
+  font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+  border-radius: 100px; border: none; cursor: pointer; white-space: nowrap;
+  transition: all 0.3s var(--ease-out);
+}
+.btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); }
+.btn-disabled {
+  display: inline-flex; align-items: center; padding: 14px 32px;
+  background: var(--gray-100); color: var(--gray-400);
+  font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+  border-radius: 100px; white-space: nowrap;
+}
+
+.newsletter-cta { background: var(--black); padding: 80px 48px; text-align: center; }
+.newsletter-cta-inner { max-width: 500px; margin: 0 auto; }
+.newsletter-cta h2 { font-family: var(--font-display); font-size: 28px; font-weight: 900; color: var(--white); margin-bottom: 12px; }
+.newsletter-cta p { font-family: var(--font-body); font-size: 16px; color: rgba(255,255,255,0.45); margin-bottom: 28px; }
+.nl-form { display: flex; border-radius: 100px; overflow: hidden; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); max-width: 440px; margin: 0 auto; }
+.nl-form:focus-within { border-color: var(--orange); box-shadow: 0 0 0 4px rgba(255,151,26,0.12); }
+.nl-input { flex: 1; padding: 14px 24px; background: transparent; border: none; color: var(--white); font-family: var(--font-ui); font-size: 15px; outline: none; min-width: 0; }
+.nl-input::placeholder { color: rgba(255,255,255,0.25); }
+.nl-btn { padding: 14px 24px; background: var(--orange); color: var(--black); font-family: var(--font-ui); font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; border-radius: 100px; border: none; cursor: pointer; margin: 4px; white-space: nowrap; transition: background 0.3s; }
+.nl-btn:hover { background: var(--white); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+@media (max-width: 768px) {
+  .page-hero { padding: 56px 20px 80px; }
+  .reports-section { padding: 0 20px; }
+  .report-card { grid-template-columns: 1fr; gap: 16px; padding: 28px 24px; }
+  .newsletter-cta { padding: 48px 20px; }
+}
+</style>

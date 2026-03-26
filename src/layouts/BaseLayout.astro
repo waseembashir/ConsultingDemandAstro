@@ -6,12 +6,18 @@ import Footer from '../components/Footer.astro';
 interface Props {
   title?: string;
   description?: string;
+  ogImage?: string;
+  ogType?: string;
 }
 
 const {
   title = 'ConsultingDemand — The Authority on Consulting',
   description = 'Expert analysis, hiring guides, and strategic insights for businesses navigating the consulting landscape.',
+  ogImage = '/og-default.png',
+  ogType = 'website',
 } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!DOCTYPE html>
@@ -22,7 +28,22 @@ const {
   <meta name="description" content={description} />
   <title>{title}</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="canonical" href={Astro.url} />
+  <link rel="canonical" href={canonicalURL} />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content={ogType} />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:image" content={new URL(ogImage, Astro.site)} />
+  <meta property="og:site_name" content="ConsultingDemand" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={new URL(ogImage, Astro.site)} />
+  <slot name="head" />
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to content</a>

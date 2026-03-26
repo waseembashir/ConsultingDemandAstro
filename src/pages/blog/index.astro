@@ -15,6 +15,29 @@ const categories = ['All Topics', 'Marketing Consulting', 'Tech Consulting', 'Op
   title="Insights & Analysis — ConsultingDemand"
   description="Expert analysis, hiring guides, and strategic insights for businesses navigating the consulting landscape."
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Insights & Analysis",
+      "description": "Expert analysis, hiring guides, and strategic insights for businesses navigating the consulting landscape.",
+      "url": `https://consultingdemand.com/blog`,
+      "publisher": {
+        "@type": "Organization",
+        "name": "ConsultingDemand",
+        "url": "https://consultingdemand.com"
+      },
+      "mainEntity": {
+        "@type": "ItemList",
+        "numberOfItems": posts.length,
+        "itemListElement": posts.map((post, i) => ({
+          "@type": "ListItem",
+          "position": i + 1,
+          "url": `https://consultingdemand.com/blog/${post.slug}`
+        }))
+      }
+    })} />
+  </Fragment>
   <!-- HERO -->
   <section class="listing-hero">
     <div class="hero-shape hero-shape-1" aria-hidden="true"></div>
@@ -23,20 +46,19 @@ const categories = ['All Topics', 'Marketing Consulting', 'Tech Consulting', 'Op
 
     <div class="listing-hero-inner">
       <div class="listing-eyebrow reveal">Insights &amp; Analysis</div>
-      <h1 class="reveal stagger-1">The consulting<br />industry, <em>decoded.</em></h1>
+      <h1 class="reveal stagger-1">The consulting<br /> industry, <em>decoded.</em></h1>
       <p class="reveal stagger-2">Expert analysis, hiring guides, and strategic insights for businesses navigating the consulting landscape.</p>
       <div class="hero-rule reveal stagger-3" aria-hidden="true"></div>
     </div>
   </section>
 
   <!-- CATEGORY FILTER -->
-  <div class="category-filter reveal stagger-4" role="navigation" aria-label="Filter by category">
-    <div class="filter-bar" role="list">
+  <div class="category-filter reveal stagger-4" aria-label="Filter posts by category">
+    <div class="filter-bar">
       {categories.map((cat, i) => (
         <button
           class:list={['filter-btn', { active: i === 0 }]}
           data-category={cat}
-          role="listitem"
           aria-pressed={i === 0 ? 'true' : 'false'}
         >
           {cat}
@@ -66,6 +88,7 @@ const categories = ['All Topics', 'Marketing Consulting', 'Tech Consulting', 'Op
             authorInitials={post.data.authorInitials}
             featured={i === 0}
             size={i === 6 ? 'wide' : 'normal'}
+            coverImage={`/og/${post.slug}.png`}
           />
         </div>
       ))}
@@ -255,18 +278,18 @@ const categories = ['All Topics', 'Marketing Consulting', 'Tech Consulting', 'Op
   grid-template-columns: repeat(12, 1fr);
   gap: 28px;
 }
-.grid-item { display: contents; }
-.grid-item--featured > :global(*) { grid-column: 1 / -1; }
-.grid-item:nth-child(2) > :global(*) { grid-column: 1 / 7; }
-.grid-item:nth-child(3) > :global(*) { grid-column: 7 / -1; }
-.grid-item:nth-child(4) > :global(*) { grid-column: 1 / 5; }
-.grid-item:nth-child(5) > :global(*) { grid-column: 5 / 9; }
-.grid-item:nth-child(6) > :global(*) { grid-column: 9 / -1; }
-.grid-item--wide > :global(*) { grid-column: 1 / -1; }
+.grid-item { grid-column: span 4; }
+.grid-item--featured { grid-column: 1 / -1; }
+.grid-item:nth-child(2) { grid-column: 1 / 7; }
+.grid-item:nth-child(3) { grid-column: 7 / -1; }
+.grid-item:nth-child(4) { grid-column: 1 / 5; }
+.grid-item:nth-child(5) { grid-column: 5 / 9; }
+.grid-item:nth-child(6) { grid-column: 9 / -1; }
+.grid-item--wide { grid-column: 1 / -1; }
 
 @media (max-width: 1024px) {
   .grid { grid-template-columns: repeat(2, 1fr); }
-  .grid-item > :global(*), .grid-item--featured > :global(*), .grid-item--wide > :global(*) { grid-column: auto !important; }
+  .grid-item, .grid-item--featured, .grid-item--wide { grid-column: auto !important; }
 }
 @media (max-width: 768px) {
   .listing-hero { padding: 56px 20px 80px; min-height: auto; }
@@ -280,17 +303,27 @@ const categories = ['All Topics', 'Marketing Consulting', 'Tech Consulting', 'Op
 </style>
 
 <script>
-// Category filter
-document.querySelectorAll('.filter-btn').forEach((btn) => {
+// Category filter — actually shows/hides posts
+document.querySelectorAll<HTMLButtonElement>('.filter-btn').forEach((btn) => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach((b) => {
+    document.querySelectorAll<HTMLButtonElement>('.filter-btn').forEach((b) => {
       b.classList.remove('active');
       b.setAttribute('aria-pressed', 'false');
     });
-    (btn as HTMLElement).classList.add('active');
+    btn.classList.add('active');
     btn.setAttribute('aria-pressed', 'true');
     btn.style.transform = 'scale(0.94)';
-    setTimeout(() => { (btn as HTMLElement).style.transform = ''; }, 150);
+    setTimeout(() => { btn.style.transform = ''; }, 150);
+
+    const selected = btn.dataset.category || '';
+    const isAll = selected === 'All Topics';
+    document.querySelectorAll<HTMLElement>('.grid-item').forEach((item) => {
+      const card = item.querySelector('[data-category]') as HTMLElement | null;
+      if (!card) return;
+      const category = card.dataset.category || '';
+      const match = isAll || category === selected;
+      item.style.display = match ? '' : 'none';
+    });
   });
 });
 

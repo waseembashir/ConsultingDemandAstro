@@ -1,0 +1,245 @@
+---
+interface CheckItem {
+  area: string;
+  minimum: string;
+  upgraded: string;
+}
+interface Props {
+  items: CheckItem[];
+  heading?: string;
+}
+const { items, heading } = Astro.props;
+---
+
+<div class="checklist-widget">
+  {heading && <p class="cl-heading">{heading}</p>}
+  <div class="cl-header-row">
+    <span class="cl-h-area">Area</span>
+    <span class="cl-h-min">Minimum</span>
+    <span class="cl-h-up">Upgraded</span>
+  </div>
+  <div class="cl-items">
+    {items.map((item, i) => (
+      <label class="cl-row" style={`--stagger: ${i * 0.05}s`}>
+        <input type="checkbox" class="cl-check" />
+        <span class="cl-checkbox" aria-hidden="true">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M2.5 6.5L5 9L9.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="cl-area">{item.area}</span>
+        <span class="cl-min">{item.minimum}</span>
+        <span class="cl-up">{item.upgraded}</span>
+      </label>
+    ))}
+  </div>
+  <div class="cl-progress">
+    <div class="cl-progress-bar">
+      <div class="cl-progress-fill"></div>
+    </div>
+    <span class="cl-progress-text">0 of {items.length} complete</span>
+  </div>
+</div>
+
+<style>
+.checklist-widget {
+  margin: 44px 0;
+  padding: 36px 32px;
+  background: var(--black);
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.checklist-widget::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255,151,26,0.15), transparent 70%);
+  pointer-events: none;
+}
+.cl-heading {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 24px;
+}
+.cl-header-row {
+  display: grid;
+  grid-template-columns: 28px 100px 1fr 1fr;
+  gap: 12px;
+  padding: 0 0 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 4px;
+}
+.cl-header-row span {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+}
+.cl-h-area { grid-column: 1 / 3; padding-left: 40px; }
+.cl-items {
+  display: flex;
+  flex-direction: column;
+}
+.cl-row {
+  display: grid;
+  grid-template-columns: 28px 100px 1fr 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+  transition: background 0.2s ease;
+  border-radius: 8px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+.cl-row:hover {
+  background: rgba(255,255,255,0.04);
+}
+.cl-check {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.cl-checkbox {
+  width: 22px;
+  height: 22px;
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s var(--ease-spring);
+  color: transparent;
+  flex-shrink: 0;
+}
+.cl-check:checked ~ .cl-checkbox {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--white);
+  transform: scale(1.1);
+}
+.cl-check:focus-visible ~ .cl-checkbox {
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
+}
+.cl-check:checked ~ .cl-area,
+.cl-check:checked ~ .cl-min,
+.cl-check:checked ~ .cl-up {
+  opacity: 0.5;
+  text-decoration: line-through;
+  text-decoration-color: rgba(255,255,255,0.3);
+}
+.cl-area {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--white);
+  transition: opacity 0.3s ease;
+}
+.cl-min {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.4;
+  transition: opacity 0.3s ease;
+}
+.cl-up {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--orange);
+  line-height: 1.4;
+  transition: opacity 0.3s ease;
+}
+.cl-progress {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.cl-progress-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.cl-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--orange), var(--magenta));
+  border-radius: 3px;
+  transition: width 0.4s var(--ease-spring);
+}
+.cl-progress-text {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.4);
+  white-space: nowrap;
+  min-width: 110px;
+}
+@media (max-width: 768px) {
+  .checklist-widget { padding: 24px 16px; }
+  .cl-header-row { display: none; }
+  .cl-row {
+    grid-template-columns: 28px 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 4px 12px;
+    padding: 16px 4px;
+  }
+  .cl-checkbox { grid-row: 1 / 4; align-self: start; margin-top: 2px; }
+  .cl-area { grid-column: 2; }
+  .cl-min {
+    grid-column: 2;
+    font-size: 12px;
+  }
+  .cl-min::before { content: 'Min: '; font-weight: 700; color: rgba(255,255,255,0.35); }
+  .cl-up {
+    grid-column: 2;
+    font-size: 12px;
+  }
+  .cl-up::before { content: 'Upgrade: '; font-weight: 700; }
+}
+</style>
+
+<script>
+document.querySelectorAll('.checklist-widget').forEach(widget => {
+  const checks = widget.querySelectorAll('.cl-check');
+  const fill = widget.querySelector('.cl-progress-fill');
+  const text = widget.querySelector('.cl-progress-text');
+  const total = checks.length;
+  const storageKey = 'cd-workspace-checklist';
+
+  // Restore state
+  try {
+    const saved = JSON.parse(localStorage.getItem(storageKey) || '[]');
+    saved.forEach((checked, i) => {
+      if (checks[i] && checked) checks[i].checked = true;
+    });
+  } catch {}
+
+  function update() {
+    const done = [...checks].filter(c => c.checked).length;
+    fill.style.width = `${(done / total) * 100}%`;
+    text.textContent = done === total ? 'All done!' : `${done} of ${total} complete`;
+    try {
+      localStorage.setItem(storageKey, JSON.stringify([...checks].map(c => c.checked)));
+    } catch {}
+  }
+
+  checks.forEach(c => c.addEventListener('change', update));
+  update();
+});
+</script>

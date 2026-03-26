@@ -1,0 +1,162 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const values = [
+  { title: 'Research-Driven', description: 'Every article is backed by real data, consultant surveys, and market analysis — not opinion dressed up as insight.' },
+  { title: 'Practitioner-Led', description: 'Our editorial team includes former consultants from McKinsey, Deloitte, Accenture, and specialist boutiques.' },
+  { title: 'Buyer-Focused', description: 'We write for the people who hire consultants, not the people who sell consulting. That shapes everything.' },
+  { title: 'Independent', description: 'No consulting firm owns us, sponsors our editorial, or influences our recommendations. Full stop.' },
+];
+
+const stats = [
+  { value: '340+', label: 'Consultants surveyed' },
+  { value: '180+', label: 'Client case studies' },
+  { value: '12', label: 'Specialisms covered' },
+  { value: '50k+', label: 'Monthly readers' },
+];
+---
+
+<BaseLayout
+  title="About — ConsultingDemand"
+  description="ConsultingDemand is the independent authority on consulting. Learn about our mission, editorial values, and the team behind the insights."
+>
+  <section class="page-hero">
+    <div class="hero-shape hero-shape-1" aria-hidden="true"></div>
+    <div class="hero-shape hero-shape-2" aria-hidden="true"></div>
+    <div class="page-hero-inner">
+      <div class="page-eyebrow reveal">About Us</div>
+      <h1 class="reveal stagger-1">The consulting industry<br />deserves better <em>analysis.</em></h1>
+      <p class="reveal stagger-2">ConsultingDemand is the independent research and editorial platform for businesses that buy consulting services.</p>
+    </div>
+  </section>
+
+  <section class="stats-bar">
+    <div class="stats-bar-inner">
+      {stats.map((s) => (
+        <div class="stat-item">
+          <span class="stat-value">{s.value}</span>
+          <span class="stat-label">{s.label}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="content-inner">
+      <div class="content-block reveal">
+        <h2>Our Mission</h2>
+        <p>Most consulting content is written by consultants, for consultants. It is marketing dressed up as thought leadership. We took a different path.</p>
+        <p>ConsultingDemand exists to serve the <strong>buyers</strong> of consulting — the CEOs, VPs, procurement leaders, and founders who need to make high-stakes hiring decisions with imperfect information.</p>
+        <p>We publish original research, rate benchmarks, hiring guides, and strategic frameworks that help business leaders navigate the consulting landscape with confidence.</p>
+      </div>
+
+      <div class="values-section">
+        <h2 class="reveal">Editorial Values</h2>
+        <div class="values-grid">
+          {values.map((v, i) => (
+            <div class:list={['value-card', `reveal stagger-${i + 1}`]}>
+              <h3>{v.title}</h3>
+              <p>{v.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="content-block reveal">
+        <h2>Get in Touch</h2>
+        <p>Have a story tip, correction, or partnership idea? We would love to hear from you.</p>
+        <div class="cta-row">
+          <a href="/contact" class="btn-primary">Contact Us</a>
+          <a href="/partner-with-us" class="btn-ghost">Partner With Us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+.page-hero {
+  background: var(--black);
+  padding: 100px 48px 120px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+.hero-shape { position: absolute; pointer-events: none; border-radius: 50%; }
+.hero-shape-1 { top: -10%; right: -5%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(255,151,26,0.08) 0%, transparent 60%); }
+.hero-shape-2 { bottom: -15%; left: -5%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(72,229,194,0.06) 0%, transparent 60%); }
+.page-hero-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+.page-eyebrow { font-family: var(--font-ui); font-size: 12px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange); margin-bottom: 24px; }
+.page-hero h1 { font-family: var(--font-display); font-size: clamp(40px, 6vw, 72px); font-weight: 900; color: var(--white); line-height: 1.05; letter-spacing: -0.04em; margin-bottom: 20px; }
+.page-hero h1 em { font-style: italic; background: linear-gradient(135deg, var(--orange), var(--mint)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.page-hero p { font-family: var(--font-body); font-size: 19px; color: rgba(255,255,255,0.45); line-height: 1.6; max-width: 580px; margin: 0 auto; }
+
+.stats-bar { background: var(--black); border-top: 1px solid rgba(255,151,26,0.15); padding: 28px 48px; }
+.stats-bar-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+.stat-item { display: flex; flex-direction: column; gap: 4px; text-align: center; }
+.stat-value { font-family: var(--font-display); font-size: 32px; font-weight: 900; letter-spacing: -0.04em; color: var(--orange); }
+.stat-label { font-family: var(--font-ui); font-size: 13px; color: rgba(255,255,255,0.45); font-weight: 500; }
+
+.content-section { padding: 80px 48px 100px; }
+.content-inner { max-width: 800px; margin: 0 auto; }
+.content-block { margin-bottom: 64px; }
+.content-block h2, .values-section h2 {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--gray-800);
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
+}
+.content-block p {
+  font-family: var(--font-body);
+  font-size: 18px;
+  color: var(--gray-600);
+  line-height: 1.75;
+  margin-bottom: 16px;
+}
+.values-section { margin-bottom: 64px; }
+.values-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 32px; }
+.value-card {
+  background: var(--cream);
+  border-radius: 16px;
+  padding: 32px;
+  border: 1px solid var(--gray-100);
+}
+.value-card h3 {
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gray-800);
+  margin-bottom: 10px;
+}
+.value-card p {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--gray-500);
+  line-height: 1.65;
+}
+.cta-row { display: flex; gap: 16px; margin-top: 28px; flex-wrap: wrap; }
+.btn-primary {
+  display: inline-flex; align-items: center; padding: 14px 36px;
+  background: var(--orange); color: var(--black);
+  font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+  border-radius: 100px; text-decoration: none; transition: all 0.3s var(--ease-out);
+}
+.btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); box-shadow: 0 12px 36px rgba(255,151,26,0.2); }
+.btn-ghost {
+  display: inline-flex; align-items: center; padding: 14px 36px;
+  border: 1px solid var(--gray-200); color: var(--gray-700);
+  font-family: var(--font-ui); font-size: 14px; font-weight: 600;
+  border-radius: 100px; text-decoration: none; transition: all 0.3s;
+}
+.btn-ghost:hover { border-color: var(--gray-400); background: var(--gray-50); }
+
+@media (max-width: 768px) {
+  .page-hero { padding: 56px 20px 80px; }
+  .stats-bar { padding: 24px 20px; }
+  .stats-bar-inner { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .content-section { padding: 48px 20px 64px; }
+  .values-grid { grid-template-columns: 1fr; }
+}
+</style>
