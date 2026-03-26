@@ -1,0 +1,309 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+
+const allPosts = await getCollection('posts');
+const posts = allPosts
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
+  .map((p) => ({ ...p, slug: p.id.replace(/\.(md|mdx)$/, '') }));
+
+const categories = ['All Topics', 'Marketing Consulting', 'Tech Consulting', 'Ops Consulting', 'Management', 'Strategy', 'Hiring Guides'];
+---
+
+<BaseLayout
+  title="Insights & Analysis — ConsultingDemand"
+  description="Expert analysis, hiring guides, and strategic insights for businesses navigating the consulting landscape."
+>
+  <!-- HERO -->
+  <section class="listing-hero">
+    <div class="hero-shape hero-shape-1" aria-hidden="true"></div>
+    <div class="hero-shape hero-shape-2" aria-hidden="true"></div>
+    <div class="hero-shape hero-shape-5" aria-hidden="true"></div>
+
+    <div class="listing-hero-inner">
+      <div class="listing-eyebrow reveal">Insights &amp; Analysis</div>
+      <h1 class="reveal stagger-1">The consulting<br />industry, <em>decoded.</em></h1>
+      <p class="reveal stagger-2">Expert analysis, hiring guides, and strategic insights for businesses navigating the consulting landscape.</p>
+      <div class="hero-rule reveal stagger-3" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- CATEGORY FILTER -->
+  <div class="category-filter reveal stagger-4" role="navigation" aria-label="Filter by category">
+    <div class="filter-bar" role="list">
+      {categories.map((cat, i) => (
+        <button
+          class:list={['filter-btn', { active: i === 0 }]}
+          data-category={cat}
+          role="listitem"
+          aria-pressed={i === 0 ? 'true' : 'false'}
+        >
+          {cat}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- POST GRID -->
+  <div class="posts-grid">
+    <div class="grid">
+      {posts.map((post, i) => (
+        <div class:list={[
+          'grid-item',
+          i === 0 && 'grid-item--featured',
+          i === 6 && 'grid-item--wide',
+          `reveal stagger-${Math.min(i + 4, 7)}`,
+        ]}>
+          <PostCard
+            title={post.data.title}
+            excerpt={post.data.excerpt}
+            category={post.data.category}
+            slug={post.slug}
+            publishDate={post.data.publishDate}
+            readTime={post.data.readTime}
+            author={post.data.author}
+            authorInitials={post.data.authorInitials}
+            featured={i === 0}
+            size={i === 6 ? 'wide' : 'normal'}
+          />
+        </div>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+/* ---- Hero ---- */
+.listing-hero {
+  background: var(--black);
+  padding: 100px 48px 140px;
+  position: relative;
+  overflow: hidden;
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+}
+.listing-hero::before {
+  content: '';
+  position: absolute;
+  top: -30%; right: -5%;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(255,151,26,0.1) 0%, transparent 60%);
+  pointer-events: none;
+  animation: orbDrift 25s ease-in-out infinite;
+}
+.listing-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -40%; left: -8%;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(72,229,194,0.06) 0%, transparent 60%);
+  pointer-events: none;
+  animation: orbDrift 30s ease-in-out infinite reverse;
+}
+@keyframes orbDrift {
+  0%, 100% { transform: translate(0,0); }
+  25% { transform: translate(30px,-20px); }
+  50% { transform: translate(-20px,30px); }
+  75% { transform: translate(20px,20px); }
+}
+.hero-shape {
+  position: absolute;
+  pointer-events: none;
+}
+.hero-shape-1 {
+  top: 10%; right: 8%;
+  width: 300px; height: 300px;
+  border: 1px solid rgba(255,151,26,0.12);
+  border-radius: 50%;
+  animation: shapeFloat 20s ease-in-out infinite;
+}
+.hero-shape-2 {
+  bottom: 15%; left: 5%;
+  width: 200px; height: 200px;
+  border: 1px solid rgba(72,229,194,0.1);
+  border-radius: 50%;
+  animation: shapeFloat 26s ease-in-out infinite;
+  animation-delay: -7s;
+}
+.hero-shape-5 {
+  bottom: 25%; right: 12%;
+  width: 80px; height: 80px;
+  border: 1px solid rgba(206,20,131,0.1);
+  transform: rotate(45deg);
+  animation: shapeRotate 30s linear infinite;
+}
+@keyframes shapeFloat {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(15px,-20px) scale(1.02); }
+  66% { transform: translate(-10px,15px) scale(0.98); }
+}
+@keyframes shapeRotate {
+  0% { transform: rotate(45deg); }
+  100% { transform: rotate(405deg); }
+}
+.listing-hero-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+.listing-eyebrow {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+}
+.listing-eyebrow::before, .listing-eyebrow::after {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--orange));
+}
+.listing-eyebrow::after { background: linear-gradient(90deg, var(--orange), transparent); }
+.listing-hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 7vw, 88px);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1.0;
+  letter-spacing: -0.04em;
+  margin-bottom: 28px;
+
+}
+.listing-hero h1 em {
+  font-style: italic;
+  color: var(--orange);
+  background: linear-gradient(135deg, var(--orange) 0%, #ffb347 40%, var(--mint) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% 200%;
+  animation: gradientShift 6s ease-in-out infinite;
+}
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.listing-hero p {
+  font-family: var(--font-body);
+  font-size: 21px;
+  color: rgba(255,255,255,0.45);
+  max-width: 580px;
+  margin: 0 auto;
+  line-height: 1.6;
+  font-weight: 300;
+}
+.hero-rule {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--orange), var(--magenta));
+  margin: 32px auto 0;
+  border-radius: 2px;
+}
+
+/* ---- Filter bar ---- */
+.category-filter {
+  max-width: 1200px;
+  margin: -36px auto 0;
+  padding: 0 48px;
+  position: relative;
+  z-index: 2;
+}
+.filter-bar {
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-radius: 100px;
+  padding: 6px;
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+  border: 1px solid rgba(255,255,255,0.6);
+}
+.filter-btn {
+  padding: 12px 26px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-500);
+  border-radius: 100px;
+  transition: all 0.35s var(--ease-spring);
+  white-space: nowrap;
+  min-height: 44px;
+}
+.filter-btn:hover { color: var(--gray-800); background: rgba(0,0,0,0.04); }
+.filter-btn.active { background: var(--black); color: var(--white); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+
+/* ---- Grid ---- */
+.posts-grid {
+  max-width: 1200px;
+  margin: 72px auto 100px;
+  padding: 0 48px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 28px;
+}
+.grid-item { display: contents; }
+.grid-item--featured > * { grid-column: 1 / -1; }
+.grid-item:nth-child(2) > * { grid-column: 1 / 7; }
+.grid-item:nth-child(3) > * { grid-column: 7 / -1; }
+.grid-item:nth-child(4) > * { grid-column: 1 / 5; }
+.grid-item:nth-child(5) > * { grid-column: 5 / 9; }
+.grid-item:nth-child(6) > * { grid-column: 9 / -1; }
+.grid-item--wide > * { grid-column: 1 / -1; }
+
+@media (max-width: 1024px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .grid-item > *, .grid-item--featured > *, .grid-item--wide > * { grid-column: auto !important; }
+}
+@media (max-width: 768px) {
+  .listing-hero { padding: 56px 20px 80px; min-height: auto; }
+  .listing-hero::before, .listing-hero::after { display: none; }
+  .hero-shape { display: none; }
+  .category-filter { padding: 0 20px; margin-top: -24px; }
+  .filter-bar { overflow-x: auto; flex-wrap: nowrap; padding: 5px; border-radius: 16px; }
+  .posts-grid { padding: 0 20px; margin: 48px auto 64px; }
+  .grid { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+// Category filter
+document.querySelectorAll('.filter-btn').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach((b) => {
+      b.classList.remove('active');
+      b.setAttribute('aria-pressed', 'false');
+    });
+    (btn as HTMLElement).classList.add('active');
+    btn.setAttribute('aria-pressed', 'true');
+    btn.style.transform = 'scale(0.94)';
+    setTimeout(() => { (btn as HTMLElement).style.transform = ''; }, 150);
+  });
+});
+
+// 3D card tilt
+document.querySelectorAll<HTMLElement>('.post-card').forEach((card) => {
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const rx = ((y - rect.height / 2) / rect.height) * -3;
+    const ry = ((x - rect.width / 2) / rect.width) * 3;
+    card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px)`;
+  });
+  card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+});
+</script>

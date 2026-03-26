@@ -1,0 +1,666 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+
+const allPosts = await getCollection('posts');
+const posts = allPosts
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
+  .map((p) => ({ ...p, slug: p.id.replace(/\.(md|mdx)$/, '') }));
+const featuredPost = posts[0];
+const recentPosts = posts.slice(1, 4);
+
+const categories = [
+  { label: 'Marketing Consulting', href: '/blog?category=Marketing+Consulting', count: 24 },
+  { label: 'Tech Consulting',      href: '/blog?category=Tech+Consulting',      count: 18 },
+  { label: 'Ops Consulting',       href: '/blog?category=Ops+Consulting',       count: 14 },
+  { label: 'Strategy',             href: '/blog?category=Strategy',             count: 21 },
+  { label: 'Hiring Guides',        href: '/blog?category=Hiring+Guides',        count: 32 },
+];
+
+const stats = [
+  { value: '340+', label: 'Consultants surveyed' },
+  { value: '180+', label: 'Client case studies' },
+  { value: '12', label: 'Specialisms covered' },
+  { value: '14 min', label: 'Avg. article depth' },
+];
+---
+
+<BaseLayout
+  title="ConsultingDemand — The Authority on Consulting"
+  description="Expert analysis, hiring guides, and strategic insights for businesses navigating the consulting landscape."
+>
+
+  <!-- HERO -->
+  <section class="home-hero">
+    <div class="hero-bg" aria-hidden="true">
+      <div class="hero-orb-1"></div>
+      <div class="hero-orb-2"></div>
+      <div class="hero-orb-3"></div>
+      <div class="hero-ring-1"></div>
+      <div class="hero-ring-2"></div>
+    </div>
+
+    <div class="hero-inner">
+      <div class="hero-eyebrow reveal">
+        <span class="eyebrow-dot" aria-hidden="true"></span>
+        The authority on consulting
+      </div>
+      <h1 class="hero-title reveal stagger-1">
+        The consulting<br/>industry,<br/><em>decoded.</em>
+      </h1>
+      <p class="hero-body reveal stagger-2">
+        Expert analysis, hiring guides, and market intelligence<br/>for businesses navigating the consulting landscape.
+      </p>
+      <div class="hero-actions reveal stagger-3">
+        <a href="/blog" class="btn-primary">Browse All Insights</a>
+        <a href="/find-a-consultant" class="btn-ghost">Find a Consultant →</a>
+      </div>
+    </div>
+
+    <div class="hero-scroll-hint reveal stagger-4" aria-hidden="true">
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stats-bar-inner">
+      {stats.map((s) => (
+        <div class="stat-item">
+          <span class="stat-value">{s.value}</span>
+          <span class="stat-label">{s.label}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- FEATURED POST -->
+  {featuredPost && (
+    <section class="featured-section">
+      <div class="featured-inner">
+        <div class="section-eyebrow reveal">
+          <span>Featured Article</span>
+        </div>
+        <div class="reveal stagger-1">
+          <PostCard
+            title={featuredPost.data.title}
+            excerpt={featuredPost.data.excerpt}
+            category={featuredPost.data.category}
+            slug={featuredPost.slug}
+            publishDate={featuredPost.data.publishDate}
+            readTime={featuredPost.data.readTime}
+            author={featuredPost.data.author}
+            authorInitials={featuredPost.data.authorInitials}
+            featured={true}
+          />
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- CATEGORIES -->
+  <section class="categories-section">
+    <div class="categories-inner">
+      <div class="section-header">
+        <div class="section-eyebrow reveal">Browse by Topic</div>
+        <h2 class="section-title reveal stagger-1">Every consulting<br/><em>specialism covered.</em></h2>
+      </div>
+      <div class="category-grid">
+        {categories.map((cat, i) => (
+          <a href={cat.href} class:list={['cat-card', `reveal stagger-${Math.min(i+1,5)}`]}>
+            <span class="cat-label">{cat.label}</span>
+            <span class="cat-count">{cat.count} articles</span>
+            <span class="cat-arrow" aria-hidden="true">→</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- RECENT POSTS -->
+  {recentPosts.length > 0 && (
+    <section class="recent-section">
+      <div class="recent-inner">
+        <div class="section-header">
+          <div class="section-eyebrow reveal">Latest Insights</div>
+          <div class="section-header-row">
+            <h2 class="section-title reveal stagger-1">Fresh from<br/><em>the desk.</em></h2>
+            <a href="/blog" class="view-all-link reveal stagger-2">View all articles →</a>
+          </div>
+        </div>
+        <div class="recent-grid">
+          {recentPosts.map((post, i) => (
+            <div class:list={[`reveal stagger-${i+1}`]}>
+              <PostCard
+                title={post.data.title}
+                excerpt={post.data.excerpt}
+                category={post.data.category}
+                slug={post.slug}
+                publishDate={post.data.publishDate}
+                readTime={post.data.readTime}
+                author={post.data.author}
+                authorInitials={post.data.authorInitials}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter-section reveal">
+    <div class="nl-shapes" aria-hidden="true">
+      <div class="nl-shape-1"></div>
+      <div class="nl-shape-2"></div>
+    </div>
+    <div class="nl-inner">
+      <p class="nl-eyebrow">Weekly intelligence</p>
+      <h2 class="nl-title">The consulting brief,<br/><em>every Thursday.</em></h2>
+      <p class="nl-body">Market moves, rate benchmarks, and hiring signals — curated for business leaders who use consultants.</p>
+      <form class="nl-form" onsubmit="return false;" aria-label="Newsletter signup">
+        <label for="hero-email" class="sr-only">Email address</label>
+        <input type="email" id="hero-email" class="nl-input" placeholder="your@company.com" />
+        <button class="nl-btn" type="submit">Subscribe Free</button>
+      </form>
+      <p class="nl-note">No spam. Unsubscribe anytime.</p>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+/* ---- Hero ---- */
+.home-hero {
+  background: var(--black);
+  min-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 48px 80px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+.hero-bg { position: absolute; inset: 0; pointer-events: none; }
+.hero-orb-1 {
+  position: absolute; top: -15%; left: 50%;
+  transform: translateX(-50%);
+  width: 800px; height: 800px;
+  background: radial-gradient(circle, rgba(255,151,26,0.07) 0%, transparent 65%);
+  animation: orbFloat 32s ease-in-out infinite;
+}
+.hero-orb-2 {
+  position: absolute; bottom: -20%; left: 10%;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(72,229,194,0.06) 0%, transparent 70%);
+  animation: orbFloat 24s ease-in-out infinite reverse;
+}
+.hero-orb-3 {
+  position: absolute; top: 20%; right: 5%;
+  width: 350px; height: 350px;
+  background: radial-gradient(circle, rgba(206,20,131,0.05) 0%, transparent 70%);
+  animation: orbFloat 28s ease-in-out infinite;
+  animation-delay: -10s;
+}
+.hero-ring-1 {
+  position: absolute; top: 10%; right: 8%;
+  width: 280px; height: 280px;
+  border: 1px solid rgba(255,151,26,0.1);
+  border-radius: 50%;
+  animation: ringRotate 40s linear infinite;
+}
+.hero-ring-2 {
+  position: absolute; bottom: 15%; left: 6%;
+  width: 180px; height: 180px;
+  border: 1px solid rgba(72,229,194,0.08);
+  border-radius: 50%;
+  animation: ringRotate 30s linear infinite reverse;
+}
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0,0); }
+  33% { transform: translate(40px,-30px); }
+  66% { transform: translate(-30px,40px); }
+}
+@keyframes ringRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  width: 100%;
+}
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 36px;
+}
+.eyebrow-dot {
+  display: block;
+  width: 6px; height: 6px;
+  background: var(--mint);
+  border-radius: 50%;
+  animation: dotPulse 2.5s ease-in-out infinite;
+}
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.7); }
+}
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(56px, 9vw, 112px);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1.0;
+  letter-spacing: -0.05em;
+  margin-bottom: 28px;
+
+}
+.hero-title em {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--orange) 0%, #ffb347 40%, var(--mint) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% 200%;
+  animation: gradShift 6s ease-in-out infinite;
+}
+@keyframes gradShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.hero-body {
+  font-family: var(--font-ui);
+  font-size: 20px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.65;
+  max-width: 560px;
+  margin: 0 auto 40px;
+  font-weight: 300;
+}
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  padding: 16px 40px;
+  background: var(--orange);
+  color: var(--black);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border-radius: 100px;
+  transition: all 0.4s var(--ease-out);
+  text-decoration: none;
+}
+.btn-primary:hover {
+  background: var(--white);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 48px rgba(255,151,26,0.25);
+}
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  padding: 16px 36px;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.75);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border-radius: 100px;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+.btn-ghost:hover {
+  border-color: rgba(255,255,255,0.5);
+  color: var(--white);
+  background: rgba(255,255,255,0.06);
+}
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.scroll-line {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(180deg, var(--orange), transparent);
+  animation: scrollDrop 2s ease-in-out infinite;
+}
+@keyframes scrollDrop {
+  0% { opacity: 0; transform: scaleY(0); transform-origin: top; }
+  40% { opacity: 1; transform: scaleY(1); }
+  100% { opacity: 0; transform: scaleY(1); transform-origin: bottom; }
+}
+
+/* ---- Stats bar ---- */
+.stats-bar {
+  background: var(--black);
+  border-top: 1px solid rgba(255,151,26,0.15);
+  padding: 28px 48px;
+}
+.stats-bar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+}
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: var(--orange);
+
+}
+.stat-label {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  font-weight: 500;
+}
+
+/* ---- Featured section ---- */
+.featured-section {
+  padding: 80px 48px;
+}
+.featured-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 24px;
+}
+.section-eyebrow::before {
+  content: '';
+  width: 32px; height: 1px;
+  background: var(--orange);
+}
+
+/* ---- Categories ---- */
+.categories-section {
+  padding: 80px 48px;
+  background: var(--black);
+}
+.categories-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-header {
+  margin-bottom: 48px;
+}
+.section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+
+}
+.section-title em {
+  font-style: italic;
+  color: var(--orange);
+  background: linear-gradient(135deg, var(--orange), var(--magenta));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+.cat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 28px 24px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  transition: all 0.3s var(--ease-out);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+.cat-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--orange), var(--magenta));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease-expo);
+}
+.cat-card:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,151,26,0.3); transform: translateY(-3px); }
+.cat-card:hover::before { transform: scaleX(1); }
+.cat-label {
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.3;
+}
+.cat-count {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+}
+.cat-arrow {
+  font-family: var(--font-ui);
+  font-size: 18px;
+  color: var(--orange);
+  margin-top: 8px;
+  transition: transform 0.3s;
+}
+.cat-card:hover .cat-arrow { transform: translateX(4px); }
+
+/* ---- Recent posts ---- */
+.recent-section {
+  padding: 80px 48px;
+}
+.recent-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.recent-section .section-title {
+  color: var(--gray-800);
+}
+.recent-section .section-title em {
+  background: linear-gradient(135deg, var(--orange), var(--magenta));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.recent-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+.view-all-link {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--orange);
+  text-decoration: none;
+  transition: color 0.2s;
+  white-space: nowrap;
+  align-self: flex-end;
+  padding-bottom: 4px;
+}
+.view-all-link:hover { color: var(--orange-dark); }
+
+/* ---- Newsletter ---- */
+.newsletter-section {
+  background: var(--black);
+  padding: 100px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.nl-shapes { position: absolute; inset: 0; pointer-events: none; }
+.nl-shape-1 {
+  position: absolute; top: -80px; right: -80px;
+  width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,151,26,0.1) 0%, transparent 70%);
+}
+.nl-shape-2 {
+  position: absolute; bottom: -60px; left: -60px;
+  width: 300px; height: 300px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(72,229,194,0.07) 0%, transparent 70%);
+}
+.nl-inner {
+  max-width: 560px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.nl-eyebrow {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mint);
+  margin-bottom: 20px;
+}
+.nl-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  margin-bottom: 16px;
+
+}
+.nl-title em {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--orange), #ffb347, var(--mint));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% 200%;
+  animation: gradShift 5s ease-in-out infinite;
+}
+.nl-body {
+  font-family: var(--font-ui);
+  font-size: 17px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.6;
+  margin-bottom: 36px;
+  font-weight: 300;
+}
+.nl-form {
+  display: flex;
+  border-radius: 100px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: border-color 0.3s, box-shadow 0.3s;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.nl-form:focus-within {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 4px rgba(255,151,26,0.12);
+}
+.nl-input {
+  flex: 1;
+  padding: 16px 24px;
+  background: transparent;
+  border: none;
+  color: var(--white);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  outline: none;
+  min-width: 0;
+}
+.nl-input::placeholder { color: rgba(255,255,255,0.25); }
+.nl-btn {
+  padding: 16px 28px;
+  background: var(--orange);
+  color: var(--black);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: 100px;
+  transition: background 0.3s;
+  white-space: nowrap;
+  margin: 4px;
+}
+.nl-btn:hover { background: var(--white); }
+.nl-note {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: rgba(255,255,255,0.3);
+  margin-top: 16px;
+}
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+/* ---- Responsive ---- */
+@media (max-width: 1024px) {
+  .stats-bar-inner { grid-template-columns: repeat(2, 1fr); }
+  .recent-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .home-hero { padding: 80px 20px 60px; min-height: 80vh; }
+  .hero-title { font-size: 52px; }
+  .hero-body { font-size: 17px; }
+  .stats-bar { padding: 24px 20px; }
+  .stats-bar-inner { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .featured-section, .categories-section, .recent-section, .newsletter-section { padding: 56px 20px; }
+  .recent-grid { grid-template-columns: 1fr; }
+  .section-header-row { flex-direction: column; align-items: flex-start; }
+  .category-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+  .hero-title { font-size: 40px; }
+  .category-grid { grid-template-columns: 1fr; }
+}
+</style>

@@ -1,0 +1,711 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  category: string;
+  author: string;
+  authorTitle: string;
+  authorBio?: string;
+  authorInitials: string;
+  publishDate: Date;
+  updatedDate?: Date;
+  readTime: string;
+  tags?: string[];
+  headings?: { depth: number; slug: string; text: string }[];
+}
+
+const {
+  title,
+  description,
+  category,
+  author,
+  authorTitle,
+  authorBio,
+  authorInitials,
+  publishDate,
+  updatedDate,
+  readTime,
+  tags = [],
+  headings = [],
+} = Astro.props;
+
+const formattedDate = publishDate.toLocaleDateString('en-GB', {
+  day: 'numeric', month: 'long', year: 'numeric',
+});
+const formattedUpdated = updatedDate?.toLocaleDateString('en-GB', {
+  day: 'numeric', month: 'long', year: 'numeric',
+});
+
+const tocItems = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+<BaseLayout title={`${title} — ConsultingDemand`} description={description}>
+  <!-- Reading progress bar -->
+  <div id="progress-bar" role="progressbar" aria-label="Reading progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+
+  <!-- Article hero -->
+  <header class="article-hero">
+    <div class="hero-bg" aria-hidden="true">
+      <div class="hero-orb hero-orb-1"></div>
+      <div class="hero-orb hero-orb-2"></div>
+    </div>
+    <div class="article-hero-inner reveal">
+      <a href={`/blog?category=${encodeURIComponent(category)}`} class="article-category">{category}</a>
+      <h1 class="article-title reveal stagger-1">{title}</h1>
+      {description && <p class="article-excerpt reveal stagger-2">{description}</p>}
+      <div class="article-meta reveal stagger-3">
+        <div class="article-avatar" aria-hidden="true">{authorInitials}</div>
+        <div>
+          <span class="meta-author">{author}</span>
+          <span class="meta-sep" aria-hidden="true">·</span>
+          <time datetime={publishDate.toISOString()}>{formattedDate}</time>
+          <span class="meta-sep" aria-hidden="true">·</span>
+          <span>{readTime}</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-rule" aria-hidden="true"></div>
+  </header>
+
+  <!-- Main content area -->
+  <div class="article-layout">
+
+    <!-- TOC sidebar -->
+    {tocItems.length > 0 && (
+      <aside class="article-toc" aria-label="Table of contents">
+        <div class="toc-sticky">
+          <p class="toc-heading">Contents</p>
+          <nav>
+            <ol class="toc-list">
+              {tocItems.map((h) => (
+                <li class:list={['toc-item', h.depth === 3 && 'toc-item--sub']}>
+                  <a href={`#${h.slug}`} class="toc-link" data-slug={h.slug}>
+                    <span class="toc-progress-fill"></span>
+                    <span class="toc-text">{h.text}</span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+          <a href="/blog" class="toc-back">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M8.5 2L3.5 7L8.5 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            All articles
+          </a>
+        </div>
+      </aside>
+    )}
+
+    <!-- Article body -->
+    <article class="article-body" id="article-body">
+      <div class="article-content prose">
+        <slot />
+      </div>
+
+      <!-- Tags -->
+      {tags.length > 0 && (
+        <div class="article-tags">
+          {tags.map((tag) => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      )}
+
+      <!-- Author card -->
+      <div class="author-card reveal">
+        <div class="author-avatar" aria-hidden="true">{authorInitials}</div>
+        <div class="author-info">
+          <strong class="author-name">{author}</strong>
+          <span class="author-role">{authorTitle}</span>
+          {authorBio && <p class="author-bio">{authorBio}</p>}
+        </div>
+      </div>
+
+      <!-- Updated note -->
+      {formattedUpdated && (
+        <p class="updated-note">Last updated: {formattedUpdated}</p>
+      )}
+    </article>
+  </div>
+
+  <!-- CTA Banner -->
+  <section class="article-cta reveal">
+    <div class="cta-inner">
+      <p class="cta-eyebrow">Find the right fit</p>
+      <h2 class="cta-title">Ready to hire a<br/><em>marketing consultant?</em></h2>
+      <p class="cta-body">We match businesses with pre-vetted consultants across marketing, tech, ops, and strategy. No retainers. No lock-in.</p>
+      <a href="/find-a-consultant" class="cta-btn">Find a Consultant <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="cta-shapes" aria-hidden="true">
+      <div class="cta-shape-1"></div>
+      <div class="cta-shape-2"></div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+/* ---- Progress bar ---- */
+#progress-bar {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--orange), var(--magenta));
+  z-index: 99;
+  transition: width 0.1s linear;
+  border-radius: 0 2px 2px 0;
+}
+
+/* ---- Hero ---- */
+.article-hero {
+  background: var(--black);
+  padding: 100px 48px 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+}
+.hero-orb-1 {
+  top: -20%; right: -5%;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(255,151,26,0.08) 0%, transparent 70%);
+  animation: orbDrift 28s ease-in-out infinite;
+}
+.hero-orb-2 {
+  bottom: -30%; left: -8%;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(206,20,131,0.06) 0%, transparent 70%);
+  animation: orbDrift 22s ease-in-out infinite reverse;
+}
+@keyframes orbDrift {
+  0%, 100% { transform: translate(0,0); }
+  33% { transform: translate(30px,-20px); }
+  66% { transform: translate(-20px,25px); }
+}
+.article-hero-inner {
+  max-width: 860px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+.article-category {
+  display: inline-block;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--orange);
+  padding: 6px 18px;
+  border-radius: 100px;
+  margin-bottom: 32px;
+  transition: background 0.3s;
+}
+.article-category:hover { background: var(--orange-dark); }
+.article-title {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 5.5vw, 68px);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1.06;
+  letter-spacing: -0.04em;
+  margin-bottom: 24px;
+
+}
+.article-excerpt {
+  font-family: var(--font-ui);
+  font-size: 19px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.6;
+  max-width: 620px;
+  margin: 0 auto 32px;
+  font-weight: 300;
+}
+.article-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  color: rgba(255,255,255,0.55);
+}
+.article-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange), var(--magenta));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--white);
+  flex-shrink: 0;
+}
+.meta-author { color: rgba(255,255,255,0.8); font-weight: 600; }
+.meta-sep { color: rgba(255,255,255,0.25); }
+.hero-rule {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,151,26,0.3), rgba(206,20,131,0.3), transparent);
+}
+
+/* ---- Layout ---- */
+.article-layout {
+  display: grid;
+  grid-template-columns: 1fr min(620px, 100%) 280px 1fr;
+  gap: 0 48px;
+  padding: 72px 0 100px;
+}
+.article-toc {
+  grid-column: 3;
+  grid-row: 1;
+}
+.article-body {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+}
+
+/* ---- TOC ---- */
+.toc-sticky {
+  position: sticky;
+  top: calc(var(--header-height) + 40px);
+  max-height: calc(100vh - var(--header-height) - 80px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 24px;
+}
+.toc-heading {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  margin-bottom: 16px;
+}
+.toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+.toc-item { }
+.toc-item--sub { padding-left: 16px; }
+.toc-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--gray-500);
+  line-height: 1.4;
+  transition: color 0.2s;
+  position: relative;
+  text-decoration: none;
+}
+.toc-link:hover { color: var(--orange); }
+.toc-link.active { color: var(--orange-dark); font-weight: 600; }
+.toc-progress-fill {
+  display: block;
+  flex-shrink: 0;
+  width: 3px;
+  height: 0%;
+  min-height: 3px;
+  background: var(--orange);
+  border-radius: 2px;
+  transition: height 0.3s var(--ease-out);
+}
+.toc-link.active .toc-progress-fill {
+  height: 100%;
+}
+.toc-text { flex: 1; }
+.toc-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 28px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-400);
+  letter-spacing: 0.04em;
+  transition: color 0.2s;
+  text-decoration: none;
+}
+.toc-back:hover { color: var(--orange); }
+
+/* ---- Prose ---- */
+.prose {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.75;
+  color: var(--gray-700);
+}
+.prose :global(h2) {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--gray-800);
+  line-height: 1.22;
+  letter-spacing: -0.03em;
+  margin: 56px 0 20px;
+
+}
+.prose :global(h3) {
+  font-family: var(--font-ui);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gray-800);
+  line-height: 1.3;
+  margin: 40px 0 14px;
+  letter-spacing: -0.01em;
+}
+.prose :global(p) { margin-bottom: 24px; }
+.prose :global(p:first-of-type::first-letter) {
+  float: left;
+  font-family: var(--font-display);
+  font-size: 72px;
+  font-weight: 900;
+  line-height: 0.75;
+  color: var(--orange);
+  margin: 8px 12px -4px 0;
+
+}
+.prose :global(ul), .prose :global(ol) {
+  padding-left: 28px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.prose :global(li) { line-height: 1.65; }
+.prose :global(ul li)::marker { color: var(--orange); }
+.prose :global(strong) { font-weight: 700; color: var(--gray-800); }
+.prose :global(em) { font-style: italic; }
+.prose :global(a) {
+  color: var(--orange-dark);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: color 0.2s;
+}
+.prose :global(a:hover) { color: var(--orange); }
+.prose :global(hr) {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gray-200), transparent);
+  margin: 48px 0;
+}
+.prose :global(blockquote) {
+  margin: 40px 0;
+  padding: 24px 32px;
+  background: var(--cream);
+  border-left: 3px solid var(--orange);
+  border-radius: 0 12px 12px 0;
+  font-family: var(--font-ui);
+  font-size: 16px;
+  color: var(--gray-700);
+  font-style: normal;
+}
+.prose :global(code) {
+  font-family: 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 0.9em;
+  background: var(--gray-100);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--magenta);
+}
+.prose :global(pre) {
+  background: var(--gray-800);
+  color: var(--gray-100);
+  padding: 24px;
+  border-radius: 12px;
+  overflow-x: auto;
+  margin: 32px 0;
+}
+.prose :global(pre code) {
+  background: none;
+  padding: 0;
+  color: inherit;
+}
+.prose :global(table) {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 32px 0;
+  font-family: var(--font-ui);
+  font-size: 15px;
+}
+.prose :global(th) {
+  padding: 12px 16px;
+  background: var(--black);
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: left;
+}
+.prose :global(td) {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--gray-100);
+  color: var(--gray-700);
+  vertical-align: top;
+  line-height: 1.5;
+}
+.prose :global(tr:hover td) { background: var(--gray-50); }
+
+/* ---- Article footer ---- */
+.article-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 56px 0 40px;
+}
+.tag {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 6px 16px;
+  background: var(--gray-100);
+  color: var(--gray-600);
+  border-radius: 100px;
+  transition: all 0.2s;
+}
+.author-card {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  padding: 32px;
+  background: var(--cream);
+  border-radius: 16px;
+  border: 1px solid var(--gray-100);
+  margin-top: 48px;
+}
+.author-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange), var(--magenta));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--white);
+  flex-shrink: 0;
+}
+.author-info { flex: 1; }
+.author-name {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gray-800);
+  margin-bottom: 4px;
+}
+.author-role {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--orange);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.author-bio {
+  font-family: var(--font-ui);
+  font-size: 15px;
+  color: var(--gray-600);
+  line-height: 1.6;
+  margin: 0;
+}
+.updated-note {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--gray-400);
+  margin-top: 24px;
+  font-style: italic;
+}
+
+/* ---- CTA Banner ---- */
+.article-cta {
+  background: var(--black);
+  padding: 100px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta-shapes { position: absolute; inset: 0; pointer-events: none; }
+.cta-shape-1 {
+  position: absolute;
+  top: -100px; right: -100px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,151,26,0.1) 0%, transparent 70%);
+}
+.cta-shape-2 {
+  position: absolute;
+  bottom: -80px; left: -80px;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(72,229,194,0.08) 0%, transparent 70%);
+}
+.cta-inner {
+  max-width: 640px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.cta-eyebrow {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mint);
+  margin-bottom: 20px;
+}
+.cta-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  margin-bottom: 20px;
+
+}
+.cta-title em {
+  font-style: italic;
+  color: var(--orange);
+  background: linear-gradient(135deg, var(--orange), #ffb347, var(--mint));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% 200%;
+  animation: gradShift 5s ease-in-out infinite;
+}
+@keyframes gradShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.cta-body {
+  font-family: var(--font-ui);
+  font-size: 18px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.6;
+  margin-bottom: 36px;
+  font-weight: 300;
+}
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 44px;
+  background: var(--orange);
+  color: var(--black);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border-radius: 100px;
+  transition: all 0.4s var(--ease-out);
+  position: relative;
+  text-decoration: none;
+}
+.cta-btn:hover {
+  background: var(--white);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 48px rgba(255,151,26,0.3);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 1200px) {
+  .article-layout {
+    grid-template-columns: 1fr min(620px, 100%) 1fr;
+  }
+  .article-toc { display: none; }
+  .article-body { grid-column: 2; }
+}
+@media (max-width: 768px) {
+  .article-hero { padding: 56px 20px 60px; }
+  .article-title { font-size: 34px; }
+  .article-layout {
+    grid-template-columns: 1fr;
+    padding: 40px 20px 60px;
+  }
+  .article-body { grid-column: 1; }
+  .article-cta { padding: 64px 20px; }
+  .prose :global(p:first-of-type::first-letter) {
+    font-size: 56px;
+    line-height: 0.8;
+  }
+}
+</style>
+
+<script>
+// Reading progress bar
+const bar = document.getElementById('progress-bar');
+const article = document.getElementById('article-body');
+if (bar && article) {
+  window.addEventListener('scroll', () => {
+    const rect = article.getBoundingClientRect();
+    const total = article.offsetHeight - window.innerHeight;
+    const scrolled = Math.max(0, -rect.top);
+    const pct = Math.min(100, (scrolled / total) * 100);
+    bar.style.width = `${pct}%`;
+    bar.setAttribute('aria-valuenow', String(Math.round(pct)));
+  }, { passive: true });
+}
+
+// TOC active state tracker
+const tocLinks = document.querySelectorAll<HTMLAnchorElement>('.toc-link');
+const headingEls = document.querySelectorAll<HTMLElement>('article h2[id], article h3[id]');
+
+if (tocLinks.length > 0 && headingEls.length > 0) {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const id = entry.target.id;
+        const link = document.querySelector<HTMLElement>(`.toc-link[data-slug="${id}"]`);
+        if (link) {
+          if (entry.isIntersecting) {
+            tocLinks.forEach((l) => l.classList.remove('active'));
+            link.classList.add('active');
+          }
+        }
+      });
+    },
+    { rootMargin: '-80px 0px -60% 0px', threshold: 0 }
+  );
+  headingEls.forEach((el) => observer.observe(el));
+}
+
+// Magnetic CTA button
+const ctaBtn = document.querySelector<HTMLElement>('.cta-btn');
+if (ctaBtn) {
+  ctaBtn.addEventListener('mousemove', (e) => {
+    const rect = ctaBtn.getBoundingClientRect();
+    const x = (e.clientX - rect.left - rect.width / 2) * 0.25;
+    const y = (e.clientY - rect.top - rect.height / 2) * 0.25;
+    ctaBtn.style.transform = `translateY(-3px) translate(${x}px, ${y}px)`;
+  });
+  ctaBtn.addEventListener('mouseleave', () => {
+    ctaBtn.style.transform = '';
+  });
+}
+</script>

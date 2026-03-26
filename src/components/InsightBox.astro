@@ -1,0 +1,74 @@
+---
+interface Props {
+  type?: 'tip' | 'warning' | 'insight' | 'data';
+  heading: string;
+  body: string;
+}
+const { type = 'insight', heading, body } = Astro.props;
+const icons: Record<string, string> = {
+  tip: '💡',
+  warning: '⚠️',
+  insight: '🔍',
+  data: '📊',
+};
+const colors: Record<string, string> = {
+  tip: 'var(--mint)',
+  warning: 'var(--orange)',
+  insight: 'var(--magenta)',
+  data: '#6366f1',
+};
+const icon = icons[type];
+const color = colors[type];
+---
+
+<div class="insight-box" style={`--accent: ${color}`}>
+  <div class="ib-header">
+    <span class="ib-icon" aria-hidden="true">{icon}</span>
+    <span class="ib-label">{type.charAt(0).toUpperCase() + type.slice(1)}</span>
+  </div>
+  <strong class="ib-heading">{heading}</strong>
+  <p class="ib-body">{body}</p>
+</div>
+
+<style>
+.insight-box {
+  margin: 40px 0;
+  padding: 28px 32px;
+  background: var(--off-white);
+  border-radius: 16px;
+  border: 1px solid var(--gray-100);
+  border-left: 4px solid var(--accent);
+  position: relative;
+}
+.ib-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.ib-icon { font-size: 16px; line-height: 1; }
+.ib-label {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.ib-heading {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gray-800);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+.ib-body {
+  font-family: var(--font-ui);
+  font-size: 15px;
+  color: var(--gray-600);
+  line-height: 1.6;
+  margin: 0;
+}
+</style>

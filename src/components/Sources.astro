@@ -1,0 +1,107 @@
+---
+interface Source {
+  label: string;
+  url?: string;
+}
+interface Props {
+  sources: Source[];
+}
+const { sources } = Astro.props;
+---
+
+<footer class="sources-section" role="contentinfo" aria-label="Article sources">
+  <div class="sources-header">
+    <span class="sources-icon" aria-hidden="true">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M2 3h5v10H3a1 1 0 0 1-1-1V3Zm7 0h5v9a1 1 0 0 1-1 1H9V3Z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M7 3V1.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5V3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+    <span>Sources &amp; References</span>
+  </div>
+  <ol class="sources-list">
+    {sources.map((s) => (
+      <li>
+        {s.url ? (
+          <a href={s.url} target="_blank" rel="noopener noreferrer">
+            {s.label}
+            <span class="external-icon" aria-hidden="true">↗</span>
+          </a>
+        ) : (
+          <span>{s.label}</span>
+        )}
+      </li>
+    ))}
+  </ol>
+</footer>
+
+<style>
+.sources-section {
+  margin-top: 56px;
+  padding: 32px;
+  background: var(--cream);
+  border-radius: 16px;
+  border: 1px solid var(--gray-100);
+}
+.sources-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  margin-bottom: 20px;
+}
+.sources-icon {
+  display: flex;
+  align-items: center;
+  color: var(--gray-400);
+}
+.sources-list {
+  list-style: none;
+  counter-reset: sources;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0;
+}
+.sources-list li {
+  counter-increment: sources;
+  display: flex;
+  gap: 12px;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  color: var(--gray-600);
+  line-height: 1.55;
+}
+.sources-list li::before {
+  content: counter(sources) ".";
+  font-weight: 700;
+  color: var(--gray-400);
+  min-width: 20px;
+  flex-shrink: 0;
+}
+.sources-list a {
+  color: var(--gray-700);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--gray-200);
+  transition: color 0.2s, text-decoration-color 0.2s;
+}
+.sources-list a:hover {
+  color: var(--orange-dark);
+  text-decoration-color: var(--orange);
+}
+.external-icon {
+  display: inline-block;
+  font-size: 11px;
+  margin-left: 3px;
+  opacity: 0.5;
+}
+@media (max-width: 768px) {
+  .sources-section { padding: 24px 20px; }
+}
+</style>

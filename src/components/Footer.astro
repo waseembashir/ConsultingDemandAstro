@@ -1,0 +1,164 @@
+---
+const categories = [
+  'Marketing Consulting',
+  'Tech Consulting',
+  'Ops Consulting',
+  'Management Consulting',
+  'Strategy Consulting',
+];
+const company = ['About', 'Contact', 'Advertise', 'Partner With Us'];
+---
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="/" class="logo">
+          <img src="/logo.png" alt="ConsultingDemand" class="logo-img" />
+        </a>
+        <p>The authority on consulting. Expert analysis and hiring guides for businesses navigating the consulting landscape.</p>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Categories</div>
+        <ul class="footer-links">
+          {categories.map((c) => (
+            <li><a href={`/categories/${c.toLowerCase().replace(/ /g, '-')}`}>{c}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Company</div>
+        <ul class="footer-links">
+          {company.map((c) => (
+            <li><a href={`/${c.toLowerCase().replace(/ /g, '-')}`}>{c}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Stay Updated</div>
+        <p class="newsletter-desc">Weekly insights on the consulting industry. No spam.</p>
+        <form class="newsletter-form" onsubmit="return false;" aria-label="Newsletter signup">
+          <label for="footer-email" class="sr-only">Email address</label>
+          <input type="email" id="footer-email" class="newsletter-input" placeholder="you@company.com" />
+          <button class="newsletter-btn" type="submit">Subscribe</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; {new Date().getFullYear()} ConsultingDemand. All rights reserved.</span>
+      <ul class="footer-legal-links">
+        <li><a href="/privacy">Privacy Policy</a></li>
+        <li><a href="/terms">Terms of Service</a></li>
+        <li><a href="/cookies">Cookie Policy</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+.site-footer {
+  background: var(--gray-800);
+  color: var(--gray-400);
+  padding: 72px 48px 40px;
+}
+.footer-inner { max-width: 1200px; margin: 0 auto; }
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1.3fr;
+  gap: 48px;
+  padding-bottom: 48px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.footer-brand .logo { margin-bottom: 16px; display: inline-flex; align-items: center; }
+.logo-img { height: 26px; width: auto; filter: brightness(0) invert(1); transition: opacity 0.3s; }
+.logo:hover .logo-img { opacity: 0.85; }
+.footer-brand p {
+  font-size: 15px;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.62);
+  max-width: 280px;
+}
+.footer-col-title {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 22px;
+}
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.footer-links a {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  color: rgba(255,255,255,0.62);
+  transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--orange); }
+.newsletter-desc {
+  font-size: 14px;
+  color: rgba(255,255,255,0.62);
+  margin-bottom: 16px;
+  font-family: var(--font-ui);
+  line-height: 1.5;
+}
+.newsletter-form {
+  display: flex;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: border-color 0.3s;
+}
+.newsletter-form:focus-within {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(255,151,26,0.1);
+}
+.newsletter-input {
+  flex: 1;
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.04);
+  border: none;
+  color: var(--white);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  outline: none;
+}
+.newsletter-input::placeholder { color: rgba(255,255,255,0.2); }
+.newsletter-btn {
+  padding: 14px 28px;
+  background: var(--orange);
+  color: var(--black);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: background 0.3s;
+}
+.newsletter-btn:hover { background: var(--orange-dark); }
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 32px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+}
+.footer-legal-links { display: flex; gap: 24px; list-style: none; }
+.footer-legal-links a { color: rgba(255,255,255,0.45); transition: color 0.2s; }
+.footer-legal-links a:hover { color: rgba(255,255,255,0.75); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+@media (max-width: 1024px) {
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+}
+@media (max-width: 768px) {
+  .site-footer { padding: 48px 20px 32px; }
+  .footer-top { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+}
+</style>

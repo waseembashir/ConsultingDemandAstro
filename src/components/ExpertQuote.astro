@@ -1,0 +1,101 @@
+---
+interface Props {
+  quote: string;
+  name: string;
+  title: string;
+  initials?: string;
+}
+const { quote, name, title, initials } = Astro.props;
+const displayInitials = initials ?? name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+---
+
+<figure class="expert-quote">
+  <blockquote class="eq-body">
+    <span class="eq-mark" aria-hidden="true">&ldquo;</span>
+    <p>{quote}</p>
+  </blockquote>
+  <figcaption class="eq-attribution">
+    <div class="eq-avatar" aria-hidden="true">{displayInitials}</div>
+    <div>
+      <strong class="eq-name">{name}</strong>
+      <span class="eq-title">{title}</span>
+    </div>
+  </figcaption>
+</figure>
+
+<style>
+.expert-quote {
+  margin: 48px 0;
+  padding: 40px 48px;
+  background: var(--black);
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.expert-quote::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(255,151,26,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.eq-mark {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 120px;
+  line-height: 0.6;
+  color: var(--orange);
+  opacity: 0.4;
+  margin-bottom: 16px;
+
+}
+.eq-body p {
+  font-family: var(--font-ui);
+  font-size: 20px;
+  line-height: 1.55;
+  color: rgba(255,255,255,0.92);
+  font-weight: 400;
+  font-style: normal;
+}
+.eq-attribution {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 28px;
+}
+.eq-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange), var(--magenta));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--white);
+  flex-shrink: 0;
+}
+.eq-name {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.01em;
+}
+.eq-title {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: rgba(255,255,255,0.55);
+  margin-top: 2px;
+}
+@media (max-width: 768px) {
+  .expert-quote { padding: 28px 24px; }
+  .eq-body p { font-size: 18px; }
+  .eq-mark { font-size: 80px; }
+}
+</style>

@@ -1,0 +1,127 @@
+---
+const navLinks = [
+  { label: 'Insights', href: '/blog' },
+  { label: 'Categories', href: '/categories' },
+  { label: 'Reports', href: '/reports' },
+  { label: 'About', href: '/about' },
+];
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="logo" aria-label="ConsultingDemand home">
+      <img src="/logo.png" alt="ConsultingDemand" class="logo-img" />
+    </a>
+
+    <nav aria-label="Main navigation">
+      <ul class="nav-links">
+        {navLinks.map((link) => (
+          <li><a href={link.href}>{link.label}</a></li>
+        ))}
+        <li><a href="/find-a-consultant" class="nav-cta">Find a Consultant</a></li>
+      </ul>
+    </nav>
+
+    <button class="mobile-menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<style>
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(0,0,0,0.92);
+  backdrop-filter: blur(24px) saturate(180%);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,151,26,0.2);
+}
+.header-inner {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo {
+  display: flex;
+  align-items: center;
+}
+.logo-img {
+  height: 28px;
+  width: auto;
+  filter: brightness(0) invert(1);
+  transition: opacity 0.3s;
+}
+.logo:hover .logo-img { opacity: 0.85; }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.68);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: color 0.3s;
+  position: relative;
+  padding-bottom: 2px;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--orange);
+  transition: width 0.5s var(--ease-expo);
+}
+.nav-links a:hover { color: var(--white); }
+.nav-links a:hover::after { width: 100%; }
+.nav-cta {
+  padding: 11px 32px !important;
+  background: var(--magenta);
+  color: var(--white) !important;
+  font-weight: 700 !important;
+  border-radius: 100px;
+  transition: all 0.3s var(--ease-out);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 12px !important;
+}
+.nav-cta::after { display: none !important; }
+.nav-cta:hover {
+  background: #b01072 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(206,20,131,0.4);
+}
+.mobile-menu-btn {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px;
+}
+.mobile-menu-btn span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--white);
+  transition: 0.3s;
+}
+@media (max-width: 768px) {
+  .header-inner { padding: 0 20px; }
+  .nav-links { display: none; }
+  .mobile-menu-btn { display: flex; }
+}
+</style>
