@@ -1,0 +1,15 @@
+# 301 Redirects: Old consultingdemand.com → New site
+# Format: /old-path /new-path 301
+
+# Changed slugs
+/blog/marketing-and-branding-consultant/  /blog/marketing-branding-consultant  301
+/blog/marketing-and-branding-consultant   /blog/marketing-branding-consultant  301
+
+# Renamed pages
+/find-your-consulting-partner/  /find-a-consultant  301
+/find-your-consulting-partner   /find-a-consultant  301
+/get-listed/  /partner-with-us  301
+/get-listed   /partner-with-us  301
+
+# Author pages (no longer exist) → blog index
+/blog/author/*  /blog  301
