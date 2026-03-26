@@ -51,7 +51,8 @@ const {
       );
       els.forEach((el) => observer.observe(el));
     }
-    observeReveals();
+    document.addEventListener('DOMContentLoaded', observeReveals);
+    document.addEventListener('astro:page-load', observeReveals);
   </script>
 </body>
 </html>

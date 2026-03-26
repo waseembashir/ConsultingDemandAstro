@@ -256,17 +256,17 @@ const categories = ['All Topics', 'Marketing Consulting', 'Tech Consulting', 'Op
   gap: 28px;
 }
 .grid-item { display: contents; }
-.grid-item--featured > * { grid-column: 1 / -1; }
-.grid-item:nth-child(2) > * { grid-column: 1 / 7; }
-.grid-item:nth-child(3) > * { grid-column: 7 / -1; }
-.grid-item:nth-child(4) > * { grid-column: 1 / 5; }
-.grid-item:nth-child(5) > * { grid-column: 5 / 9; }
-.grid-item:nth-child(6) > * { grid-column: 9 / -1; }
-.grid-item--wide > * { grid-column: 1 / -1; }
+.grid-item--featured > :global(*) { grid-column: 1 / -1; }
+.grid-item:nth-child(2) > :global(*) { grid-column: 1 / 7; }
+.grid-item:nth-child(3) > :global(*) { grid-column: 7 / -1; }
+.grid-item:nth-child(4) > :global(*) { grid-column: 1 / 5; }
+.grid-item:nth-child(5) > :global(*) { grid-column: 5 / 9; }
+.grid-item:nth-child(6) > :global(*) { grid-column: 9 / -1; }
+.grid-item--wide > :global(*) { grid-column: 1 / -1; }
 
 @media (max-width: 1024px) {
   .grid { grid-template-columns: repeat(2, 1fr); }
-  .grid-item > *, .grid-item--featured > *, .grid-item--wide > * { grid-column: auto !important; }
+  .grid-item > :global(*), .grid-item--featured > :global(*), .grid-item--wide > :global(*) { grid-column: auto !important; }
 }
 @media (max-width: 768px) {
   .listing-hero { padding: 56px 20px 80px; min-height: auto; }

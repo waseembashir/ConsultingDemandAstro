@@ -115,7 +115,7 @@ const tocItems = headings.filter((h) => h.depth === 2 || h.depth === 3);
       )}
 
       <!-- Author card -->
-      <div class="author-card reveal">
+      <div class="author-card">
         <div class="author-avatar" aria-hidden="true">{authorInitials}</div>
         <div class="author-info">
           <strong class="author-name">{author}</strong>
@@ -132,7 +132,7 @@ const tocItems = headings.filter((h) => h.depth === 2 || h.depth === 3);
   </div>
 
   <!-- CTA Banner -->
-  <section class="article-cta reveal">
+  <section class="article-cta">
     <div class="cta-inner">
       <p class="cta-eyebrow">Find the right fit</p>
       <h2 class="cta-title">Ready to hire a<br/><em>marketing consultant?</em></h2>
@@ -658,54 +658,58 @@ const tocItems = headings.filter((h) => h.depth === 2 || h.depth === 3);
 </style>
 
 <script>
-// Reading progress bar
-const bar = document.getElementById('progress-bar');
-const article = document.getElementById('article-body');
-if (bar && article) {
-  window.addEventListener('scroll', () => {
-    const rect = article.getBoundingClientRect();
-    const total = article.offsetHeight - window.innerHeight;
-    const scrolled = Math.max(0, -rect.top);
-    const pct = Math.min(100, (scrolled / total) * 100);
-    bar.style.width = `${pct}%`;
-    bar.setAttribute('aria-valuenow', String(Math.round(pct)));
-  }, { passive: true });
-}
+function initArticle() {
+  // Reading progress bar
+  const bar = document.getElementById('progress-bar');
+  const article = document.getElementById('article-body');
+  if (bar && article) {
+    window.addEventListener('scroll', () => {
+      const rect = article.getBoundingClientRect();
+      const total = article.offsetHeight - window.innerHeight;
+      const scrolled = Math.max(0, -rect.top);
+      const pct = Math.min(100, (scrolled / total) * 100);
+      bar.style.width = `${pct}%`;
+      bar.setAttribute('aria-valuenow', String(Math.round(pct)));
+    }, { passive: true });
+  }
 
-// TOC active state tracker
-const tocLinks = document.querySelectorAll<HTMLAnchorElement>('.toc-link');
-const headingEls = document.querySelectorAll<HTMLElement>('article h2[id], article h3[id]');
+  // TOC active state tracker
+  const tocLinks = document.querySelectorAll<HTMLAnchorElement>('.toc-link');
+  const headingEls = document.querySelectorAll<HTMLElement>('article h2[id], article h3[id]');
 
-if (tocLinks.length > 0 && headingEls.length > 0) {
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        const id = entry.target.id;
-        const link = document.querySelector<HTMLElement>(`.toc-link[data-slug="${id}"]`);
-        if (link) {
-          if (entry.isIntersecting) {
-            tocLinks.forEach((l) => l.classList.remove('active'));
-            link.classList.add('active');
+  if (tocLinks.length > 0 && headingEls.length > 0) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const id = entry.target.id;
+          const link = document.querySelector<HTMLElement>(`.toc-link[data-slug="${id}"]`);
+          if (link) {
+            if (entry.isIntersecting) {
+              tocLinks.forEach((l) => l.classList.remove('active'));
+              link.classList.add('active');
+            }
           }
-        }
-      });
-    },
-    { rootMargin: '-80px 0px -60% 0px', threshold: 0 }
-  );
-  headingEls.forEach((el) => observer.observe(el));
-}
+        });
+      },
+      { rootMargin: '-80px 0px -60% 0px', threshold: 0 }
+    );
+    headingEls.forEach((el) => observer.observe(el));
+  }
 
-// Magnetic CTA button
-const ctaBtn = document.querySelector<HTMLElement>('.cta-btn');
-if (ctaBtn) {
-  ctaBtn.addEventListener('mousemove', (e) => {
-    const rect = ctaBtn.getBoundingClientRect();
-    const x = (e.clientX - rect.left - rect.width / 2) * 0.25;
-    const y = (e.clientY - rect.top - rect.height / 2) * 0.25;
-    ctaBtn.style.transform = `translateY(-3px) translate(${x}px, ${y}px)`;
-  });
-  ctaBtn.addEventListener('mouseleave', () => {
-    ctaBtn.style.transform = '';
-  });
+  // Magnetic CTA button
+  const ctaBtn = document.querySelector<HTMLElement>('.cta-btn');
+  if (ctaBtn) {
+    ctaBtn.addEventListener('mousemove', (e) => {
+      const rect = ctaBtn.getBoundingClientRect();
+      const x = (e.clientX - rect.left - rect.width / 2) * 0.25;
+      const y = (e.clientY - rect.top - rect.height / 2) * 0.25;
+      ctaBtn.style.transform = `translateY(-3px) translate(${x}px, ${y}px)`;
+    });
+    ctaBtn.addEventListener('mouseleave', () => {
+      ctaBtn.style.transform = '';
+    });
+  }
 }
+document.addEventListener('DOMContentLoaded', initArticle);
+document.addEventListener('astro:page-load', initArticle);
 </script>
