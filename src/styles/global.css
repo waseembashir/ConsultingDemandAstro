@@ -7,6 +7,8 @@
   --orange: #ff971a;
   --orange-light: #fff3e0;
   --orange-dark: #e07800;
+  --orange-text: #9a5c00;       /* AA-safe on white/cream backgrounds */
+  --light-text-muted: #8a8a8a;  /* AA-safe on black backgrounds (4.57:1) */
   --black: #000000;
   --mint: #48e5c2;
   --mint-light: #e0faf4;

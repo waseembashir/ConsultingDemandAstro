@@ -17,11 +17,18 @@ const colors: Record<string, string> = {
   insight: 'var(--magenta)',
   data: '#6366f1',
 };
+const textColors: Record<string, string> = {
+  tip: '#1a7a64',
+  warning: 'var(--orange-text)',
+  insight: 'var(--magenta)',
+  data: '#4f46e5',
+};
 const icon = icons[type];
 const color = colors[type];
+const textColor = textColors[type];
 ---
 
-<div class="insight-box" style={`--accent: ${color}`}>
+<div class="insight-box" style={`--accent: ${color}; --accent-text: ${textColor}`}>
   <div class="ib-header">
     <span class="ib-icon" aria-hidden="true">{icon}</span>
     <span class="ib-label">{type.charAt(0).toUpperCase() + type.slice(1)}</span>
@@ -53,7 +60,7 @@ const color = colors[type];
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 .ib-heading {
   display: block;

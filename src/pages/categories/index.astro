@@ -102,7 +102,7 @@ const categories = [...categoryMap.entries()]
 .page-hero p {
   font-family: var(--font-body);
   font-size: 19px;
-  color: rgba(255,255,255,0.45);
+  color: var(--light-text-muted);
   line-height: 1.6;
 }
 
@@ -156,7 +156,7 @@ const categories = [...categoryMap.entries()]
   font-family: var(--font-display);
   font-size: 36px;
   font-weight: 900;
-  color: var(--orange);
+  color: var(--orange-text);
   letter-spacing: -0.03em;
 }
 .category-card-label {
@@ -175,7 +175,7 @@ const categories = [...categoryMap.entries()]
 .category-card-arrow {
   font-family: var(--font-ui);
   font-size: 20px;
-  color: var(--orange);
+  color: var(--orange-text);
   transition: transform 0.3s;
 }
 .category-card:hover .category-card-arrow { transform: translateX(4px); }
