@@ -62,7 +62,7 @@ const tocItems = headings.filter((h) => h.depth === 2 || h.depth === 3);
         <div>
           <span class="meta-author">{author}</span>
           <span class="meta-sep" aria-hidden="true">·</span>
-          <time datetime={publishDate.toISOString()}>{formattedDate}</time>
+          <time datetime={(updatedDate || publishDate).toISOString()}>{formattedUpdated || formattedDate}</time>
           <span class="meta-sep" aria-hidden="true">·</span>
           <span>{readTime}</span>
         </div>
@@ -245,15 +245,15 @@ const tocItems = headings.filter((h) => h.depth === 2 || h.depth === 3);
   color: rgba(255,255,255,0.55);
 }
 .article-avatar {
-  width: 36px;
-  height: 36px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--orange), var(--magenta));
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-ui);
-  font-size: 11px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--white);
   flex-shrink: 0;
