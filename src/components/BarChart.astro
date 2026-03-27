@@ -25,9 +25,8 @@ const maxValue = max ?? Math.max(...bars.map(b => b.value));
         <div class="bc-row" style={`--delay: ${i * 0.1}s`}>
           <span class="bc-label">{bar.label}</span>
           <div class="bc-track">
-            <div class="bc-fill" style={`--width: ${pct}%; --bar-color: ${colorVar}`} aria-valuenow={bar.value} aria-valuemin={0} aria-valuemax={maxValue} role="meter">
-              <span class="bc-value">{bar.value}{bar.suffix || '%'}</span>
-            </div>
+            <div class="bc-fill" style={`--width: ${pct}%; --bar-color: ${colorVar}`} aria-valuenow={bar.value} aria-valuemin={0} aria-valuemax={maxValue} role="meter"></div>
+            <span class="bc-value">{bar.value}{bar.suffix || '%'}</span>
           </div>
         </div>
       );
@@ -76,7 +75,6 @@ const maxValue = max ?? Math.max(...bars.map(b => b.value));
   height: 32px;
   background: var(--gray-100);
   border-radius: 8px;
-  overflow: hidden;
   position: relative;
 }
 .bc-fill {
@@ -84,10 +82,6 @@ const maxValue = max ?? Math.max(...bars.map(b => b.value));
   width: 0;
   background: linear-gradient(90deg, var(--bar-color), color-mix(in srgb, var(--bar-color) 70%, var(--magenta)));
   border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: 12px;
   transition: width 1s var(--ease-expo);
   transition-delay: var(--delay, 0s);
 }
@@ -95,6 +89,10 @@ const maxValue = max ?? Math.max(...bars.map(b => b.value));
   width: var(--width);
 }
 .bc-value {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
   font-family: var(--font-ui);
   font-size: 13px;
   font-weight: 700;
