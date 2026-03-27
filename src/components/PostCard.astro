@@ -5,6 +5,7 @@ interface Props {
   category: string;
   slug: string;
   publishDate: Date;
+  updatedDate?: Date;
   readTime: string;
   author: string;
   authorInitials: string;
@@ -19,6 +20,7 @@ const {
   category,
   slug,
   publishDate,
+  updatedDate,
   readTime,
   author,
   authorInitials,
@@ -27,7 +29,8 @@ const {
   coverImage,
 } = Astro.props;
 
-const formattedDate = publishDate.toLocaleDateString('en-GB', {
+const displayDate = updatedDate || publishDate;
+const formattedDate = displayDate.toLocaleDateString('en-GB', {
   month: 'long',
   year: 'numeric',
 });
@@ -53,7 +56,7 @@ const formattedDate = publishDate.toLocaleDateString('en-GB', {
     </div>
     <div class="card-body">
       <div class="card-meta">
-        <time datetime={publishDate.toISOString().slice(0, 10)}>{formattedDate}</time>
+        <time datetime={displayDate.toISOString().slice(0, 10)}>{formattedDate}</time>
         <span class="card-meta-dot" aria-hidden="true"></span>
         <span>{readTime}</span>
       </div>
