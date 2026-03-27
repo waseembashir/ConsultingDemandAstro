@@ -21,12 +21,13 @@ const maxValue = max ?? Math.max(...bars.map(b => b.value));
     {bars.map((bar, i) => {
       const pct = Math.round((bar.value / maxValue) * 100);
       const colorVar = bar.color === 'magenta' ? 'var(--magenta)' : bar.color === 'mint' ? 'var(--mint)' : 'var(--orange)';
+      const isSmall = pct < 30;
       return (
         <div class="bc-row" style={`--delay: ${i * 0.1}s`}>
           <span class="bc-label">{bar.label}</span>
           <div class="bc-track">
             <div class="bc-fill" style={`--width: ${pct}%; --bar-color: ${colorVar}`} aria-valuenow={bar.value} aria-valuemin={0} aria-valuemax={maxValue} role="meter"></div>
-            <span class="bc-value">{bar.value}{bar.suffix || '%'}</span>
+            <span class:list={['bc-value', { 'bc-value--outside': isSmall }]} style={isSmall ? `--left: ${pct}%` : undefined}>{bar.value}{bar.suffix || '%'}</span>
           </div>
         </div>
       );
@@ -101,6 +102,11 @@ const maxValue = max ?? Math.max(...bars.map(b => b.value));
   opacity: 0;
   transition: opacity 0.4s ease;
   transition-delay: calc(var(--delay, 0s) + 0.6s);
+}
+.bc-value--outside {
+  right: auto;
+  left: calc(var(--left) + 8px);
+  color: var(--gray-700);
 }
 .bar-chart.is-visible .bc-value {
   opacity: 1;
