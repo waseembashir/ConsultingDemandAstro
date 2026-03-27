@@ -22,13 +22,13 @@ const maxValue = max ?? Math.max(...bars.map(b => b.value));
       const pct = Math.round((bar.value / maxValue) * 100);
       const colorVar = bar.color === 'magenta' ? 'var(--magenta)' : bar.color === 'mint' ? 'var(--mint)' : 'var(--orange)';
       const valueText = `${bar.value}${bar.suffix || '%'}`;
-      const isInside = pct >= 70;
+      const isFull = pct >= 95;
       return (
-        <div class="bc-row" style={`--delay: ${i * 0.1}s`}>
+        <div class="bc-row" style={`--delay: ${i * 0.1}s; --pct: ${pct}%`}>
           <span class="bc-label">{bar.label}</span>
           <div class="bc-track" role="meter" aria-valuenow={bar.value} aria-valuemin={0} aria-valuemax={maxValue} aria-label={`${bar.label}: ${valueText}`}>
             <div class="bc-fill" style={`--width: ${pct}%; --bar-color: ${colorVar}`}></div>
-            <span class:list={['bc-value', { 'bc-value--outside': !isInside }]} style={!isInside ? `--left: ${pct}%` : undefined}>{valueText}</span>
+            <span class:list={['bc-value', { 'bc-value--inside': isFull }]}>{valueText}</span>
           </div>
         </div>
       );
@@ -92,22 +92,22 @@ const maxValue = max ?? Math.max(...bars.map(b => b.value));
 }
 .bc-value {
   position: absolute;
-  right: 12px;
+  left: calc(var(--pct) + 8px);
   top: 50%;
   transform: translateY(-50%);
   font-family: var(--font-ui);
   font-size: 13px;
   font-weight: 700;
-  color: var(--white);
+  color: var(--gray-700);
   white-space: nowrap;
   opacity: 0;
   transition: opacity 0.4s ease;
   transition-delay: calc(var(--delay, 0s) + 0.6s);
 }
-.bc-value--outside {
-  right: auto;
-  left: calc(var(--left) + 8px);
-  color: var(--gray-700);
+.bc-value--inside {
+  left: auto;
+  right: 12px;
+  color: var(--white);
 }
 .bar-chart.is-visible .bc-value {
   opacity: 1;
