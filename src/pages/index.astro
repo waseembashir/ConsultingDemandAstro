@@ -94,6 +94,7 @@ const stats = [
             author={featuredPost.data.author}
             authorInitials={featuredPost.data.authorInitials}
             featured={true}
+            coverImage={`/cover/${featuredPost.slug}.png`}
           />
         </div>
       </div>
@@ -143,6 +144,7 @@ const stats = [
                 readTime={post.data.readTime}
                 author={post.data.author}
                 authorInitials={post.data.authorInitials}
+                coverImage={`/cover/${post.slug}.png`}
               />
             </div>
           ))}
