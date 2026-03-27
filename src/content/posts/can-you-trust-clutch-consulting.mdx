@@ -16,6 +16,8 @@ import BarChart from '../../components/BarChart.astro';
 import ExpertQuote from '../../components/ExpertQuote.astro';
 import TakeawaysBox from '../../components/TakeawaysBox.astro';
 import VersusCards from '../../components/VersusCards.astro';
+import DecisionQuiz from '../../components/DecisionQuiz.astro';
+import InteractiveChecklist from '../../components/InteractiveChecklist.astro';
 
 You have budget approval, a shortlist to build, and a Clutch tab open. The ratings look clean. The reviews sound credible. But before you start copying firm names into a spreadsheet, pause.
 
@@ -88,6 +90,22 @@ Clutch grew up in IT services and software development. The platform's deepest r
   caption="Our assessment of Clutch's reliability across key dimensions (higher = more trustworthy)"
 />
 
+<DecisionQuiz
+  heading="Should you trust this Clutch profile?"
+  questions={[
+    { question: "Does the firm have more than 10 verified (phone-interviewed) reviews?", optionA: "Yes, most reviews are phone-verified", optionB: "Few or no phone-verified reviews" },
+    { question: "Are the reviews spread over multiple years, or clustered in one month?", optionA: "Spread naturally over time", optionB: "Suspiciously clustered in a short window" },
+    { question: "Can you find the firm on at least two other platforms (G2, GoodFirms, LinkedIn)?", optionA: "Yes, consistent presence across platforms", optionB: "Little or no presence outside Clutch" },
+    { question: "Do the reviewer companies check out on LinkedIn?", optionA: "Yes, real companies with real employees", optionB: "Can't verify or companies look questionable" },
+    { question: "Does the profile include detailed case studies with specific results?", optionA: "Yes, concrete deliverables and outcomes", optionB: "Generic descriptions or no case studies" },
+    { question: "Are the review scores realistic — some variation across categories?", optionA: "Normal variation — strong in some areas, okay in others", optionB: "Suspiciously perfect scores across every category" }
+  ]}
+  labelA="Trustworthy"
+  labelB="Proceed with caution"
+  resultA="This Clutch profile shows strong trust signals. The reviews appear authentic, the firm has cross-platform presence, and the evidence is verifiable. Still run your own reference checks, but this is a solid starting point for your shortlist."
+  resultB="This Clutch profile has red flags worth investigating. Before adding this firm to your shortlist, request direct references outside the platform, verify their portfolio independently, and check why their cross-platform presence is thin."
+/>
+
 ## A Five-Step Framework for Using Clutch Without Getting Burned
 
 <ExpertQuote
@@ -116,6 +134,19 @@ Ask shortlisted firms for two or three recent client references — specifically
 ### 5. Run a paid pilot before a full engagement
 
 Start with a scoped diagnostic or strategy sprint. A two-week paid engagement at lower risk reveals more about a firm's actual capabilities than 100 reviews. You learn how they communicate, how they handle ambiguity, and whether their senior people actually show up after the sale.
+
+<InteractiveChecklist
+  heading="Clutch due diligence checklist"
+  items={[
+    { area: "Discovery", minimum: "Filter by service, location, and budget on Clutch", upgraded: "Cross-search the same filters on G2 and GoodFirms simultaneously" },
+    { area: "Review audit", minimum: "Read top 5 reviews for patterns", upgraded: "Check phone-verified vs self-submitted ratio for each firm" },
+    { area: "Cross-reference", minimum: "Google the firm name + reviews", upgraded: "Verify on G2, GoodFirms, LinkedIn, and Trustpilot" },
+    { area: "Reviewer verification", minimum: "Check reviewer has a LinkedIn profile", upgraded: "Confirm reviewer's company exists and matches the project scope described" },
+    { area: "Red flag scan", minimum: "Look for clustered review dates", upgraded: "Check for perfect scores, vague descriptions, and missing case studies" },
+    { area: "Direct references", minimum: "Ask firm for one client reference", upgraded: "Request 2-3 references NOT on their Clutch profile" },
+    { area: "Paid pilot", minimum: "Start with a small scoped engagement", upgraded: "Run a 2-week diagnostic sprint before committing to full engagement" }
+  ]}
+/>
 
 ## How Clutch Compares to the Alternatives
 
@@ -186,6 +217,8 @@ Check whether the review was phone-verified or self-submitted. Look up the revie
 ### Is Clutch good for finding management consultants specifically?
 
 Clutch's deepest coverage is in IT services, software development, and marketing agencies. Management consulting, strategy advisory, and niche verticals have thinner coverage — fewer firms listed, fewer reviews per firm, and less category specificity. It's a reasonable starting point but shouldn't be your only source for consulting-specific searches.
+
+<InsightBox type="data" heading="Data freshness note" body="All statistics, ratings, and pricing in this article were last verified on 27 March 2026. Clutch's Trustpilot rating (2.4★), the 15% review rejection rate, and premium profile pricing ($1,500–$1,800) are subject to change. We review and update this article quarterly." />
 
 [Find a Consultant](/find-a-consultant)
 

@@ -4,7 +4,7 @@ import AxeBuilder from '@axe-core/playwright';
 test.describe('Blog listing page — QA suite', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/blog');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
   });
 
   // ──────────────────── SEO & Meta ────────────────────
@@ -265,7 +265,7 @@ test.describe('Blog listing page — QA suite', () => {
     });
 
     await page.goto('/blog');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
 
     expect(errors).toEqual([]);
   });
