@@ -69,25 +69,26 @@ const steps = [
         <h2>Submit Your Brief</h2>
         <p>Tell us about your project. We will be in touch within one working day.</p>
       </div>
-      <form class="brief-form reveal stagger-1" onsubmit="return false;" aria-label="Consultant brief form">
+      <form class="brief-form reveal stagger-1" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" aria-label="Consultant brief form">
+        <input type="hidden" name="_subject" value="New consultant brief from ConsultingDemand" />
         <div class="form-row">
           <div class="form-group">
             <label for="brief-name">Name</label>
-            <input type="text" id="brief-name" placeholder="Your name" required />
+            <input type="text" id="brief-name" name="name" placeholder="Your name" required />
           </div>
           <div class="form-group">
             <label for="brief-email">Work Email</label>
-            <input type="email" id="brief-email" placeholder="you@company.com" required />
+            <input type="email" id="brief-email" name="email" placeholder="you@company.com" required />
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label for="brief-company">Company</label>
-            <input type="text" id="brief-company" placeholder="Company name" />
+            <input type="text" id="brief-company" name="company" placeholder="Company name" />
           </div>
           <div class="form-group">
             <label for="brief-specialism">Specialism Needed</label>
-            <select id="brief-specialism">
+            <select id="brief-specialism" name="specialism">
               <option value="">Select a specialism</option>
               {specialisms.map((s) => <option value={s.name}>{s.name}</option>)}
             </select>
@@ -95,7 +96,7 @@ const steps = [
         </div>
         <div class="form-group">
           <label for="brief-description">Describe Your Project</label>
-          <textarea id="brief-description" rows="5" placeholder="What challenge are you trying to solve? What does success look like?" required></textarea>
+          <textarea id="brief-description" name="description" rows="5" placeholder="What challenge are you trying to solve? What does success look like?" required></textarea>
         </div>
         <button type="submit" class="btn-primary">Submit Brief</button>
       </form>

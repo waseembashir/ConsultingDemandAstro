@@ -161,9 +161,10 @@ const stats = [
       <p class="nl-eyebrow">Weekly intelligence</p>
       <h2 class="nl-title">The consulting brief,<br/><em>every Thursday.</em></h2>
       <p class="nl-body">Market moves, rate benchmarks, and hiring signals — curated for business leaders who use consultants.</p>
-      <form class="nl-form" onsubmit="return false;" aria-label="Newsletter signup">
+      <form class="nl-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" aria-label="Newsletter signup">
+        <input type="hidden" name="_subject" value="New newsletter signup from ConsultingDemand" />
         <label for="hero-email" class="sr-only">Email address</label>
-        <input type="email" id="hero-email" class="nl-input" placeholder="your@company.com" />
+        <input type="email" id="hero-email" name="email" class="nl-input" placeholder="your@company.com" required />
         <button class="nl-btn" type="submit">Subscribe Free</button>
       </form>
       <p class="nl-note">No spam. Unsubscribe anytime.</p>
