@@ -23,7 +23,22 @@ These Astro components exist in `src/components/` and can be imported into any M
 | `InteractiveChecklist` | Persistent checklist with localStorage + progress bar | Actionable frameworks, evaluation criteria |
 | `Sources` | Numbered reference links | Citations at the bottom |
 
-## Rules
+## Step 1: Apply future search findings (if available)
+
+Before adding widgets, check if a future_search has been run for this post. If research data exists, **weave the findings into the article prose first**:
+
+1. **Original data framing** — add specific claims backed by research (e.g., "We analysed 50 profiles and found...")
+2. **Entity disambiguation** — if the research flagged naming confusion, clarify in the text
+3. **SERP gap exploitation** — strengthen sections where competitors are weak based on the research
+4. **Stats and claims** — update or add data points from live SERP findings
+5. **Competitor weaknesses** — address gaps that no other ranking page covers
+6. **Freshness signals** — add "Last verified" dates and quarterly review notes for volatile data
+
+This is the most important step. Widgets enhance presentation, but the prose improvements are what drive ranking and authority.
+
+## Step 2: Add interactive widgets
+
+### Rules
 
 1. **Read the full blog post first** before making changes
 2. **Every post MUST have at minimum**: StatsRow, BarChart, PullQuote, InsightBox, ExpertQuote, TakeawaysBox
