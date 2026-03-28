@@ -51,13 +51,7 @@ This is the most important step. Widgets enhance presentation, but the prose imp
 
 ## After you finish
 
-**IMPORTANT: Always run QA after making changes.** Start the dev server if not running, then execute the Playwright blog QA tests to verify nothing is broken:
-
-```
-npm run dev & sleep 5 && npx playwright test tests/blog-qa.spec.ts
-```
-
-Fix any failures before considering the task done.
+Do NOT run QA yourself — the user's workflow runs QA as a separate step after this skill.
 
 ## Input
 
